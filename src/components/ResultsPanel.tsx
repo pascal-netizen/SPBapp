@@ -2,9 +2,10 @@ import { useTranslation } from 'react-i18next'
 import { ResultCard } from './ResultCard'
 
 interface ResultItem { labelKey: string; value: number; unit: string; decimals?: number }
-interface ResultsPanelProps { results: ResultItem[]; utilization: number }
+interface ResultGroup { groupKey: string; items: ResultItem[] }
+interface ResultsPanelProps { groups: ResultGroup[]; utilization: number }
 
-export function ResultsPanel({ results, utilization }: ResultsPanelProps) {
+export function ResultsPanel({ groups, utilization }: ResultsPanelProps) {
   const { t } = useTranslation()
   return (
     <div>
@@ -19,16 +20,25 @@ export function ResultsPanel({ results, utilization }: ResultsPanelProps) {
           {t('common.warning')}
         </div>
       )}
-      <div className="grid grid-cols-2 gap-2">
-        {results.map((r) => (
-          <ResultCard
-            key={r.labelKey}
-            label={t(r.labelKey)}
-            value={r.value}
-            unit={r.unit}
-            decimals={r.decimals ?? 2}
-            warning={r.labelKey.includes('utilization') && utilization > 100}
-          />
+      <div className="space-y-4">
+        {groups.map((group) => (
+          <div key={group.groupKey}>
+            <div className="text-xs font-medium text-surface-400 dark:text-surface-500 mb-1.5 px-1">
+              {t(group.groupKey)}
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              {group.items.map((r) => (
+                <ResultCard
+                  key={r.labelKey}
+                  label={t(r.labelKey)}
+                  value={r.value}
+                  unit={r.unit}
+                  decimals={r.decimals ?? 2}
+                  warning={r.labelKey.includes('utilization') && utilization > 100}
+                />
+              ))}
+            </div>
+          </div>
         ))}
       </div>
     </div>

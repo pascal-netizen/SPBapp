@@ -20,22 +20,44 @@ export function TurningTab() {
     if (kc11 !== null && mc !== null) setInputs((prev) => ({ ...prev, kc11, mc }))
   }
   const { results, steps } = useMemo(() => calculateTurning(inputs), [inputs])
-  const resultItems = [
-    { labelKey: 'turning.n', value: results.n, unit: t('units.rpm') },
-    { labelKey: 'turning.vf', value: results.vf, unit: t('units.mmmin') },
-    { labelKey: 'turning.h', value: results.h, unit: t('units.mm'), decimals: 4 },
-    { labelKey: 'turning.b', value: results.b, unit: t('units.mm') },
-    { labelKey: 'turning.A', value: results.A, unit: 'mm²', decimals: 4 },
-    { labelKey: 'turning.kc', value: results.kc, unit: t('units.Nmm2') },
-    { labelKey: 'turning.Fc', value: results.Fc, unit: t('units.N') },
-    { labelKey: 'turning.Ff', value: results.Ff, unit: t('units.N') },
-    { labelKey: 'turning.Fp', value: results.Fp, unit: t('units.N') },
-    { labelKey: 'turning.Pc', value: results.Pc, unit: t('units.kW') },
-    { labelKey: 'turning.P', value: results.P, unit: t('units.kW') },
-    { labelKey: 'turning.M', value: results.M, unit: t('units.Nm') },
-    { labelKey: 'turning.Q', value: results.Q, unit: t('units.cm3min') },
-    { labelKey: 'common.utilization', value: results.utilization, unit: t('units.percent'), decimals: 1 },
+
+  const resultGroups = [
+    {
+      groupKey: 'groups.geometry',
+      items: [
+        { labelKey: 'turning.h', value: results.h, unit: t('units.mm'), decimals: 4 },
+        { labelKey: 'turning.b', value: results.b, unit: t('units.mm') },
+        { labelKey: 'turning.A', value: results.A, unit: 'mm²', decimals: 4 },
+      ],
+    },
+    {
+      groupKey: 'groups.kinematics',
+      items: [
+        { labelKey: 'turning.n', value: results.n, unit: t('units.rpm') },
+        { labelKey: 'turning.vf', value: results.vf, unit: t('units.mmmin') },
+      ],
+    },
+    {
+      groupKey: 'groups.forces',
+      items: [
+        { labelKey: 'turning.kc', value: results.kc, unit: t('units.Nmm2') },
+        { labelKey: 'turning.Fc', value: results.Fc, unit: t('units.N') },
+        { labelKey: 'turning.Ff', value: results.Ff, unit: t('units.N') },
+        { labelKey: 'turning.Fp', value: results.Fp, unit: t('units.N') },
+      ],
+    },
+    {
+      groupKey: 'groups.power',
+      items: [
+        { labelKey: 'turning.Pc', value: results.Pc, unit: t('units.kW') },
+        { labelKey: 'turning.P', value: results.P, unit: t('units.kW') },
+        { labelKey: 'turning.M', value: results.M, unit: t('units.Nm') },
+        { labelKey: 'turning.Q', value: results.Q, unit: t('units.cm3min') },
+        { labelKey: 'common.utilization', value: results.utilization, unit: t('units.percent'), decimals: 1 },
+      ],
+    },
   ]
+
   return (
     <div>
       <h2 className="text-lg font-semibold tracking-tight text-surface-900 dark:text-white mb-5">{t('turning.title')}</h2>
@@ -60,7 +82,7 @@ export function TurningTab() {
             <InputField label={t('common.machinePower')} value={inputs.Pmachine} unit="kW" onChange={(v) => update('Pmachine', v)} step={0.5} />
           </div>
         </div>
-        <ResultsPanel results={resultItems} utilization={results.utilization} />
+        <ResultsPanel groups={resultGroups} utilization={results.utilization} />
       </div>
       <CalculationSteps steps={steps} />
     </div>

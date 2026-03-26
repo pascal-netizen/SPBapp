@@ -33,23 +33,43 @@ export function MillingTab() {
 
   const { results, steps } = useMemo(() => calculateMilling(inputs), [inputs])
 
-  const resultItems = [
-    { labelKey: 'milling.phiS', value: results.phiS, unit: '°' },
-    { labelKey: 'milling.ze', value: results.ze, unit: '', decimals: 3 },
-    { labelKey: 'milling.n', value: results.n, unit: t('units.rpm') },
-    { labelKey: 'milling.vf', value: results.vf, unit: t('units.mmmin') },
-    { labelKey: 'milling.hm', value: results.hm, unit: t('units.mm'), decimals: 4 },
-    { labelKey: 'milling.hmax', value: results.hmax, unit: t('units.mm'), decimals: 4 },
-    { labelKey: 'milling.b', value: results.b, unit: t('units.mm') },
-    { labelKey: 'milling.kc', value: results.kc, unit: t('units.Nmm2') },
-    { labelKey: 'milling.Fc', value: results.Fc, unit: t('units.N') },
-    { labelKey: 'milling.Ff', value: results.Ff, unit: t('units.N') },
-    { labelKey: 'milling.Fa', value: results.Fa, unit: t('units.N') },
-    { labelKey: 'milling.FfMean', value: results.FfMean, unit: t('units.N') },
-    { labelKey: 'milling.M', value: results.M, unit: t('units.Nm') },
-    { labelKey: 'milling.P', value: results.P, unit: t('units.kW') },
-    { labelKey: 'common.utilization', value: results.utilization, unit: t('units.percent'), decimals: 1 },
-    { labelKey: 'milling.Q', value: results.Q, unit: t('units.cm3min') },
+  const resultGroups = [
+    {
+      groupKey: 'groups.geometry',
+      items: [
+        { labelKey: 'milling.phiS', value: results.phiS, unit: '°' },
+        { labelKey: 'milling.ze', value: results.ze, unit: '', decimals: 3 },
+        { labelKey: 'milling.hm', value: results.hm, unit: t('units.mm'), decimals: 4 },
+        { labelKey: 'milling.hmax', value: results.hmax, unit: t('units.mm'), decimals: 4 },
+        { labelKey: 'milling.b', value: results.b, unit: t('units.mm') },
+      ],
+    },
+    {
+      groupKey: 'groups.kinematics',
+      items: [
+        { labelKey: 'milling.n', value: results.n, unit: t('units.rpm') },
+        { labelKey: 'milling.vf', value: results.vf, unit: t('units.mmmin') },
+      ],
+    },
+    {
+      groupKey: 'groups.forces',
+      items: [
+        { labelKey: 'milling.kc', value: results.kc, unit: t('units.Nmm2') },
+        { labelKey: 'milling.Fc', value: results.Fc, unit: t('units.N') },
+        { labelKey: 'milling.Ff', value: results.Ff, unit: t('units.N') },
+        { labelKey: 'milling.Fa', value: results.Fa, unit: t('units.N') },
+        { labelKey: 'milling.FfMean', value: results.FfMean, unit: t('units.N') },
+      ],
+    },
+    {
+      groupKey: 'groups.power',
+      items: [
+        { labelKey: 'milling.M', value: results.M, unit: t('units.Nm') },
+        { labelKey: 'milling.P', value: results.P, unit: t('units.kW') },
+        { labelKey: 'milling.Q', value: results.Q, unit: t('units.cm3min') },
+        { labelKey: 'common.utilization', value: results.utilization, unit: t('units.percent'), decimals: 1 },
+      ],
+    },
   ]
 
   return (
@@ -81,7 +101,7 @@ export function MillingTab() {
             <InputField label={t('common.machinePower')} value={inputs.Pmachine} unit="kW" onChange={(v) => update('Pmachine', v)} step={0.5} />
           </div>
         </div>
-        <ResultsPanel results={resultItems} utilization={results.utilization} />
+        <ResultsPanel groups={resultGroups} utilization={results.utilization} />
       </div>
       <CalculationSteps steps={steps} />
     </div>

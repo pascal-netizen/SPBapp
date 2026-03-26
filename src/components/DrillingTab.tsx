@@ -20,24 +20,46 @@ export function DrillingTab() {
     if (kc11 !== null && mc !== null) setInputs((prev) => ({ ...prev, kc11, mc }))
   }
   const { results, steps } = useMemo(() => calculateDrilling(inputs), [inputs])
-  const resultItems = [
-    { labelKey: 'drilling.kappa', value: results.kappa, unit: '°', decimals: 1 },
-    { labelKey: 'drilling.n', value: results.n, unit: t('units.rpm') },
-    { labelKey: 'drilling.fz', value: results.fz, unit: t('units.mm'), decimals: 4 },
-    { labelKey: 'drilling.vf', value: results.vf, unit: t('units.mmmin') },
-    { labelKey: 'drilling.h', value: results.h, unit: t('units.mm'), decimals: 4 },
-    { labelKey: 'drilling.b', value: results.b, unit: t('units.mm') },
-    { labelKey: 'drilling.A', value: results.A, unit: 'mm²', decimals: 4 },
-    { labelKey: 'drilling.kc', value: results.kc, unit: t('units.Nmm2') },
-    { labelKey: 'drilling.Fc', value: results.Fc, unit: t('units.N') },
-    { labelKey: 'drilling.Ff', value: results.Ff, unit: t('units.N') },
-    { labelKey: 'drilling.M', value: results.M, unit: t('units.Nm') },
-    { labelKey: 'drilling.Pc', value: results.Pc, unit: t('units.kW') },
-    { labelKey: 'drilling.P', value: results.P, unit: t('units.kW') },
-    { labelKey: 'drilling.Q', value: results.Q, unit: t('units.cm3min') },
-    { labelKey: 'drilling.th', value: results.th, unit: t('units.min'), decimals: 3 },
-    { labelKey: 'common.utilization', value: results.utilization, unit: t('units.percent'), decimals: 1 },
+
+  const resultGroups = [
+    {
+      groupKey: 'groups.geometry',
+      items: [
+        { labelKey: 'drilling.kappa', value: results.kappa, unit: '°', decimals: 1 },
+        { labelKey: 'drilling.fz', value: results.fz, unit: t('units.mm'), decimals: 4 },
+        { labelKey: 'drilling.h', value: results.h, unit: t('units.mm'), decimals: 4 },
+        { labelKey: 'drilling.b', value: results.b, unit: t('units.mm') },
+        { labelKey: 'drilling.A', value: results.A, unit: 'mm²', decimals: 4 },
+      ],
+    },
+    {
+      groupKey: 'groups.kinematics',
+      items: [
+        { labelKey: 'drilling.n', value: results.n, unit: t('units.rpm') },
+        { labelKey: 'drilling.vf', value: results.vf, unit: t('units.mmmin') },
+      ],
+    },
+    {
+      groupKey: 'groups.forces',
+      items: [
+        { labelKey: 'drilling.kc', value: results.kc, unit: t('units.Nmm2') },
+        { labelKey: 'drilling.Fc', value: results.Fc, unit: t('units.N') },
+        { labelKey: 'drilling.Ff', value: results.Ff, unit: t('units.N') },
+      ],
+    },
+    {
+      groupKey: 'groups.power',
+      items: [
+        { labelKey: 'drilling.M', value: results.M, unit: t('units.Nm') },
+        { labelKey: 'drilling.Pc', value: results.Pc, unit: t('units.kW') },
+        { labelKey: 'drilling.P', value: results.P, unit: t('units.kW') },
+        { labelKey: 'drilling.Q', value: results.Q, unit: t('units.cm3min') },
+        { labelKey: 'drilling.th', value: results.th, unit: t('units.min'), decimals: 3 },
+        { labelKey: 'common.utilization', value: results.utilization, unit: t('units.percent'), decimals: 1 },
+      ],
+    },
   ]
+
   return (
     <div>
       <h2 className="text-lg font-semibold tracking-tight text-surface-900 dark:text-white mb-5">{t('drilling.title')}</h2>
@@ -63,7 +85,7 @@ export function DrillingTab() {
             <InputField label={t('common.machinePower')} value={inputs.Pmachine} unit="kW" onChange={(v) => update('Pmachine', v)} step={0.5} />
           </div>
         </div>
-        <ResultsPanel results={resultItems} utilization={results.utilization} />
+        <ResultsPanel groups={resultGroups} utilization={results.utilization} />
       </div>
       <CalculationSteps steps={steps} />
     </div>

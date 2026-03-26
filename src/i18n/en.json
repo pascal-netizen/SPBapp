@@ -7,5 +7,6 @@
   "drilling": { "title": "Drilling (Twist Drill)", "d": "Drill Diameter d", "vc": "Cutting Speed vc", "f": "Feed per Revolution f", "z": "Number of Cutting Edges z", "sigma": "Point Angle σ", "l": "Drilling Depth l", "kc11": "Spec. Cutting Force kc1.1", "mc": "Exponent mc", "kappa": "Half Point Angle κ", "n": "Spindle Speed n", "fz": "Feed per Tooth fz", "vf": "Feed Rate vf", "h": "Chip Thickness h", "b": "Chip Width b", "A": "Chip Cross Section A", "kc": "Spec. Cutting Force kc", "Fc": "Cutting Force Fc", "Ff": "Thrust Force (axial) Ff", "M": "Torque M", "Pc": "Cutting Power Pc", "P": "Drive Power P", "Q": "Material Removal Rate Q", "th": "Machining Time th" },
   "units": { "mm": "mm", "deg": "°", "Nmm2": "N/mm²", "mmin": "m/min", "kW": "kW", "N": "N", "Nm": "Nm", "rpm": "RPM", "mmmin": "mm/min", "cm3min": "cm³/min", "min": "min", "percent": "%" },
   "kengTable": { "title": "Engagement Factor Reference", "slotting": "Slotting (ae ≈ D)", "fifty": "50% Engagement", "thirty": "30% Engagement", "face": "Face Milling (10–20%)", "highFeed": "High Feed Milling" },
+  "groups": { "geometry": "Geometry", "kinematics": "Kinematics", "forces": "Forces", "power": "Power & Utilization" },
   "theme": { "light": "Light", "dark": "Dark", "system": "System" }
 }

@@ -7,5 +7,6 @@
   "drilling": { "title": "Bohren (Spiralbohrer)", "d": "Bohrdurchmesser d", "vc": "Schnittgeschwindigkeit vc", "f": "Vorschub pro Umdrehung f", "z": "Schneidenzahl z", "sigma": "Spitzenwinkel σ", "l": "Bohrtiefe l", "kc11": "Spez. Schnittkraft kc1.1", "mc": "Exponent mc", "kappa": "Halber Spitzenwinkel κ", "n": "Drehzahl n", "fz": "Vorschub pro Schneide fz", "vf": "Vorschubgeschwindigkeit vf", "h": "Spanungsdicke h", "b": "Spanungsbreite b", "A": "Spanungsquerschnitt A", "kc": "Spez. Schnittkraft kc", "Fc": "Schnittkraft Fc", "Ff": "Vorschubkraft (axial) Ff", "M": "Drehmoment M", "Pc": "Schnittleistung Pc", "P": "Antriebsleistung P", "Q": "Zeitspanvolumen Q", "th": "Bearbeitungszeit th" },
   "units": { "mm": "mm", "deg": "°", "Nmm2": "N/mm²", "mmin": "m/min", "kW": "kW", "N": "N", "Nm": "Nm", "rpm": "U/min", "mmmin": "mm/min", "cm3min": "cm³/min", "min": "min", "percent": "%" },
   "kengTable": { "title": "Eingriffsfaktor-Referenz", "slotting": "Nutfräsen (ae ≈ D)", "fifty": "50% Eingriff", "thirty": "30% Eingriff", "face": "Planfräsen (10–20%)", "highFeed": "High Feed Fräsen" },
+  "groups": { "geometry": "Geometrie", "kinematics": "Kinematik", "forces": "Kräfte", "power": "Leistung & Auslastung" },
   "theme": { "light": "Hell", "dark": "Dunkel", "system": "System" }
 }
