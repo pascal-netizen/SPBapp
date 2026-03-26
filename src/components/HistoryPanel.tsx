@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { HistoryEntry } from '../hooks/useHistory'
 
@@ -14,6 +14,14 @@ const tabLabels: Record<string, string> = { milling: 'tabs.milling', turning: 't
 export function HistoryPanel({ entries, onLoad, onRemove, onClear }: HistoryPanelProps) {
   const [isOpen, setIsOpen] = useState(false)
   const { t } = useTranslation()
+  const prevCount = useRef(entries.length)
+
+  useEffect(() => {
+    if (entries.length > prevCount.current) {
+      setIsOpen(true)
+    }
+    prevCount.current = entries.length
+  }, [entries.length])
 
   if (entries.length === 0 && !isOpen) return null
 
