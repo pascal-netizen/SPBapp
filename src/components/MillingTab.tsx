@@ -8,6 +8,7 @@ import { QuickPresets } from './QuickPresets'
 import { ActionBar } from './ActionBar'
 import { KengInfo } from './KengInfo'
 import { calculateMilling, calculateKeng } from '../calculations/milling'
+import { materials } from '../data/materials'
 import { useUrlSync, decodeState } from '../hooks/useUrlState'
 import { exportPDF, exportXLSX, shareUrl } from '../utils/export'
 import type { MillingInputs } from '../calculations/types'
@@ -109,10 +110,30 @@ export function MillingTab({ history, loadedEntry }: MillingTabProps) {
     },
   ]
 
-  const exportData = () => resultGroups.map((g) => ({
-    group: t(g.groupKey),
-    items: g.items.map((i) => ({ label: t(i.labelKey), value: i.value, unit: i.unit, decimals: i.decimals })),
-  }))
+  const exportData = () => {
+    const mat = materials.find((m) => m.id === materialId)
+    const inputGroup = {
+      group: t('common.inputs'),
+      items: [
+        { label: t('common.material'), value: 0, unit: mat?.name ?? '', isText: true },
+        { label: t('milling.D'), value: inputs.D, unit: 'mm' },
+        { label: t('milling.z'), value: inputs.z, unit: '' },
+        { label: t('milling.fz'), value: inputs.fz, unit: 'mm' },
+        { label: t('milling.ap'), value: inputs.ap, unit: 'mm' },
+        { label: t('milling.ae'), value: inputs.ae, unit: 'mm' },
+        { label: t('milling.kappa'), value: inputs.kappa, unit: '°' },
+        { label: t('milling.kc11'), value: inputs.kc11, unit: 'N/mm²' },
+        { label: t('milling.mc'), value: inputs.mc, unit: '' },
+        { label: t('milling.vc'), value: inputs.vc, unit: 'm/min' },
+        { label: t('milling.Keng'), value: inputs.Keng, unit: '' },
+        { label: t('common.machinePower'), value: inputs.Pmachine, unit: 'kW' },
+      ],
+    }
+    return [inputGroup, ...resultGroups.map((g) => ({
+      group: t(g.groupKey),
+      items: g.items.map((i) => ({ label: t(i.labelKey), value: i.value, unit: i.unit, decimals: i.decimals })),
+    }))]
+  }
 
   return (
     <div>

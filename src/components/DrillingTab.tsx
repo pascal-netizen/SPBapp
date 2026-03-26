@@ -7,6 +7,7 @@ import { CalculationSteps } from './CalculationSteps'
 import { QuickPresets } from './QuickPresets'
 import { ActionBar } from './ActionBar'
 import { calculateDrilling } from '../calculations/drilling'
+import { materials } from '../data/materials'
 import { useUrlSync, decodeState } from '../hooks/useUrlState'
 import { exportPDF, exportXLSX, shareUrl } from '../utils/export'
 import type { DrillingInputs } from '../calculations/types'
@@ -94,10 +95,29 @@ export function DrillingTab({ history, loadedEntry }: DrillingTabProps) {
     },
   ]
 
-  const exportData = () => resultGroups.map((g) => ({
-    group: t(g.groupKey),
-    items: g.items.map((i) => ({ label: t(i.labelKey), value: i.value, unit: i.unit, decimals: i.decimals })),
-  }))
+  const exportData = () => {
+    const mat = materials.find((m) => m.id === materialId)
+    const inputGroup = {
+      group: t('common.inputs'),
+      items: [
+        { label: t('common.material'), value: 0, unit: mat?.name ?? '', isText: true },
+        { label: t('drilling.d'), value: inputs.d, unit: 'mm' },
+        { label: t('drilling.vc'), value: inputs.vc, unit: 'm/min' },
+        { label: t('drilling.f'), value: inputs.f, unit: 'mm/U' },
+        { label: t('drilling.z'), value: inputs.z, unit: '' },
+        { label: t('drilling.sigma'), value: inputs.sigma, unit: '°' },
+        { label: t('drilling.l'), value: inputs.l, unit: 'mm' },
+        { label: t('drilling.kc11'), value: inputs.kc11, unit: 'N/mm²' },
+        { label: t('drilling.mc'), value: inputs.mc, unit: '' },
+        { label: t('common.efficiency'), value: inputs.eta, unit: '' },
+        { label: t('common.machinePower'), value: inputs.Pmachine, unit: 'kW' },
+      ],
+    }
+    return [inputGroup, ...resultGroups.map((g) => ({
+      group: t(g.groupKey),
+      items: g.items.map((i) => ({ label: t(i.labelKey), value: i.value, unit: i.unit, decimals: i.decimals })),
+    }))]
+  }
 
   return (
     <div>

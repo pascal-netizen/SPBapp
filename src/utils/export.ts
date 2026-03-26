@@ -3,6 +3,7 @@ interface ExportResult {
   value: number
   unit: string
   decimals?: number
+  isText?: boolean
 }
 
 interface ExportGroup {
@@ -12,6 +13,21 @@ interface ExportGroup {
 
 function sanitizeFilename(name: string) {
   return name.replace(/[^a-zA-Z0-9äöüÄÖÜß\-_ ]/g, '_').trim()
+}
+
+function formatValue(item: ExportResult): string {
+  if (item.isText) return item.unit
+  return `${item.value.toFixed(item.decimals ?? 2)} ${item.unit}`.trim()
+}
+
+function formatCellValue(item: ExportResult): string | number {
+  if (item.isText) return item.unit
+  return Number(item.value.toFixed(item.decimals ?? 2))
+}
+
+function formatCellUnit(item: ExportResult): string {
+  if (item.isText) return ''
+  return item.unit
 }
 
 export async function exportPDF(title: string, groups: ExportGroup[]) {
@@ -45,14 +61,12 @@ export async function exportPDF(title: string, groups: ExportGroup[]) {
     y += 6
 
     doc.setFontSize(10)
-    doc.setFont('helvetica', 'normal')
 
     for (const item of group.items) {
-      const val = item.value.toFixed(item.decimals ?? 2)
       doc.setFont('helvetica', 'normal')
       doc.text(item.label, 18, y)
       doc.setFont('helvetica', 'bold')
-      doc.text(`${val} ${item.unit}`, pageWidth - 14, y, { align: 'right' })
+      doc.text(formatValue(item), pageWidth - 14, y, { align: 'right' })
       y += 5.5
 
       if (y > 275) {
@@ -74,13 +88,13 @@ export async function exportXLSX(title: string, groups: ExportGroup[]) {
   for (const group of groups) {
     rows.push([group.group, '', ''])
     for (const item of group.items) {
-      rows.push([item.label, Number(item.value.toFixed(item.decimals ?? 2)), item.unit])
+      rows.push([item.label, formatCellValue(item), formatCellUnit(item)])
     }
     rows.push(['', '', ''])
   }
 
   const ws = XLSX.utils.aoa_to_sheet([['Parameter', 'Wert', 'Einheit'], ...rows])
-  ws['!cols'] = [{ wch: 35 }, { wch: 15 }, { wch: 12 }]
+  ws['!cols'] = [{ wch: 35 }, { wch: 20 }, { wch: 12 }]
 
   const wb = XLSX.utils.book_new()
   XLSX.utils.book_append_sheet(wb, ws, title.slice(0, 31))
