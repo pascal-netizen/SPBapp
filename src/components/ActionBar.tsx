@@ -3,11 +3,12 @@ import { useTranslation } from 'react-i18next'
 
 interface ActionBarProps {
   onSave: () => void
-  onExportCSV: () => void
+  onExportPDF: () => void
+  onExportXLSX: () => void
   onShare: () => void
 }
 
-export function ActionBar({ onSave, onExportCSV, onShare }: ActionBarProps) {
+export function ActionBar({ onSave, onExportPDF, onExportXLSX, onShare }: ActionBarProps) {
   const { t } = useTranslation()
   const [saved, setSaved] = useState(false)
   const [shared, setShared] = useState(false)
@@ -23,6 +24,8 @@ export function ActionBar({ onSave, onExportCSV, onShare }: ActionBarProps) {
     setShared(true)
     setTimeout(() => setShared(false), 1500)
   }
+
+  const btnClass = 'inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border border-surface-200 dark:border-surface-700 bg-white dark:bg-surface-800 text-surface-600 dark:text-surface-400 hover:border-primary-300 dark:hover:border-primary-600 hover:text-primary-600 dark:hover:text-primary-400 cursor-pointer transition-colors'
 
   return (
     <div className="flex items-center gap-2 flex-wrap">
@@ -45,14 +48,17 @@ export function ActionBar({ onSave, onExportCSV, onShare }: ActionBarProps) {
         )}
         {saved ? t('actions.saved') : t('actions.save')}
       </button>
-      <button
-        onClick={onExportCSV}
-        className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border border-surface-200 dark:border-surface-700 bg-white dark:bg-surface-800 text-surface-600 dark:text-surface-400 hover:border-primary-300 dark:hover:border-primary-600 hover:text-primary-600 dark:hover:text-primary-400 cursor-pointer transition-colors"
-      >
+      <button onClick={onExportPDF} className={btnClass}>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="w-3.5 h-3.5">
           <path fillRule="evenodd" d="M4 2a1.5 1.5 0 00-1.5 1.5v9A1.5 1.5 0 004 14h8a1.5 1.5 0 001.5-1.5V6.621a1.5 1.5 0 00-.44-1.06L9.94 2.439A1.5 1.5 0 008.878 2H4zm4 3.5a.75.75 0 01.75.75v2.69l.72-.72a.75.75 0 111.06 1.06l-2 2a.75.75 0 01-1.06 0l-2-2a.75.75 0 011.06-1.06l.72.72V6.25A.75.75 0 018 5.5z" clipRule="evenodd" />
         </svg>
-        CSV
+        PDF
+      </button>
+      <button onClick={onExportXLSX} className={btnClass}>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="w-3.5 h-3.5">
+          <path fillRule="evenodd" d="M1.5 1.5A.5.5 0 012 1h12a.5.5 0 01.5.5v13a.5.5 0 01-.5.5H2a.5.5 0 01-.5-.5v-13zM4 5a.5.5 0 000 1h2a.5.5 0 000-1H4zm0 2.5a.5.5 0 000 1h2a.5.5 0 000-1H4zM4 10a.5.5 0 000 1h2a.5.5 0 000-1H4zm6-5a.5.5 0 000 1h2a.5.5 0 000-1h-2zm0 2.5a.5.5 0 000 1h2a.5.5 0 000-1h-2zm0 2.5a.5.5 0 000 1h2a.5.5 0 000-1h-2z" clipRule="evenodd" />
+        </svg>
+        XLSX
       </button>
       <button
         onClick={handleShare}

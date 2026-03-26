@@ -29,7 +29,12 @@ const themeIcons: Record<Theme, typeof SunIcon> = {
 
 const themeOrder: Theme[] = ['light', 'dark', 'system']
 
-export function Header() {
+interface HeaderProps {
+  historyCount?: number
+  onOpenHistory?: () => void
+}
+
+export function Header({ historyCount = 0, onOpenHistory }: HeaderProps) {
   const { t, i18n } = useTranslation()
   const { theme, setTheme } = useTheme()
 
@@ -55,6 +60,22 @@ export function Header() {
         </div>
       </div>
       <div className="flex items-center gap-2">
+        {onOpenHistory && (
+          <button
+            onClick={onOpenHistory}
+            title={t('history.title')}
+            className="relative p-2 rounded-lg border border-surface-200 dark:border-surface-700 bg-white dark:bg-surface-800 text-surface-600 dark:text-surface-400 hover:bg-surface-50 dark:hover:bg-surface-700 cursor-pointer transition-colors"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
+              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-13a.75.75 0 00-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 000-1.5h-3.25V5z" clipRule="evenodd" />
+            </svg>
+            {historyCount > 0 && (
+              <span className="absolute -top-1 -right-1 w-4 h-4 flex items-center justify-center text-[9px] font-bold bg-primary-600 text-white rounded-full">
+                {historyCount > 9 ? '9+' : historyCount}
+              </span>
+            )}
+          </button>
+        )}
         <div className="flex rounded-lg overflow-hidden border border-surface-200 dark:border-surface-700">
           {(['de', 'en'] as const).map((lang) => (
             <button

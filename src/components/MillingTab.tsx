@@ -9,7 +9,7 @@ import { ActionBar } from './ActionBar'
 import { KengInfo } from './KengInfo'
 import { calculateMilling, calculateKeng } from '../calculations/milling'
 import { useUrlSync, decodeState } from '../hooks/useUrlState'
-import { exportCSV, shareUrl } from '../utils/export'
+import { exportPDF, exportXLSX, shareUrl } from '../utils/export'
 import type { MillingInputs } from '../calculations/types'
 import type { useHistory, HistoryEntry } from '../hooks/useHistory'
 
@@ -109,12 +109,10 @@ export function MillingTab({ history, loadedEntry }: MillingTabProps) {
     },
   ]
 
-  const handleExportCSV = () => {
-    exportCSV(t('milling.title'), resultGroups.map((g) => ({
-      group: t(g.groupKey),
-      items: g.items.map((i) => ({ label: t(i.labelKey), value: i.value, unit: i.unit, decimals: i.decimals })),
-    })))
-  }
+  const exportData = () => resultGroups.map((g) => ({
+    group: t(g.groupKey),
+    items: g.items.map((i) => ({ label: t(i.labelKey), value: i.value, unit: i.unit, decimals: i.decimals })),
+  }))
 
   return (
     <div>
@@ -122,7 +120,8 @@ export function MillingTab({ history, loadedEntry }: MillingTabProps) {
         <h2 className="text-lg font-semibold tracking-tight text-surface-900 dark:text-white">{t('milling.title')}</h2>
         <ActionBar
           onSave={() => history.addEntry('milling', materialId, inputs)}
-          onExportCSV={handleExportCSV}
+          onExportPDF={() => exportPDF(t('milling.title'), exportData())}
+          onExportXLSX={() => exportXLSX(t('milling.title'), exportData())}
           onShare={shareUrl}
         />
       </div>

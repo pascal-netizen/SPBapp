@@ -8,7 +8,7 @@ import { QuickPresets } from './QuickPresets'
 import { ActionBar } from './ActionBar'
 import { calculateTurning } from '../calculations/turning'
 import { useUrlSync, decodeState } from '../hooks/useUrlState'
-import { exportCSV, shareUrl } from '../utils/export'
+import { exportPDF, exportXLSX, shareUrl } from '../utils/export'
 import type { TurningInputs } from '../calculations/types'
 import type { useHistory, HistoryEntry } from '../hooks/useHistory'
 
@@ -92,12 +92,10 @@ export function TurningTab({ history, loadedEntry }: TurningTabProps) {
     },
   ]
 
-  const handleExportCSV = () => {
-    exportCSV(t('turning.title'), resultGroups.map((g) => ({
-      group: t(g.groupKey),
-      items: g.items.map((i) => ({ label: t(i.labelKey), value: i.value, unit: i.unit, decimals: i.decimals })),
-    })))
-  }
+  const exportData = () => resultGroups.map((g) => ({
+    group: t(g.groupKey),
+    items: g.items.map((i) => ({ label: t(i.labelKey), value: i.value, unit: i.unit, decimals: i.decimals })),
+  }))
 
   return (
     <div>
@@ -105,7 +103,8 @@ export function TurningTab({ history, loadedEntry }: TurningTabProps) {
         <h2 className="text-lg font-semibold tracking-tight text-surface-900 dark:text-white">{t('turning.title')}</h2>
         <ActionBar
           onSave={() => history.addEntry('turning', materialId, inputs)}
-          onExportCSV={handleExportCSV}
+          onExportPDF={() => exportPDF(t('turning.title'), exportData())}
+          onExportXLSX={() => exportXLSX(t('turning.title'), exportData())}
           onShare={shareUrl}
         />
       </div>

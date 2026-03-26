@@ -8,7 +8,7 @@ import { QuickPresets } from './QuickPresets'
 import { ActionBar } from './ActionBar'
 import { calculateDrilling } from '../calculations/drilling'
 import { useUrlSync, decodeState } from '../hooks/useUrlState'
-import { exportCSV, shareUrl } from '../utils/export'
+import { exportPDF, exportXLSX, shareUrl } from '../utils/export'
 import type { DrillingInputs } from '../calculations/types'
 import type { useHistory, HistoryEntry } from '../hooks/useHistory'
 
@@ -94,12 +94,10 @@ export function DrillingTab({ history, loadedEntry }: DrillingTabProps) {
     },
   ]
 
-  const handleExportCSV = () => {
-    exportCSV(t('drilling.title'), resultGroups.map((g) => ({
-      group: t(g.groupKey),
-      items: g.items.map((i) => ({ label: t(i.labelKey), value: i.value, unit: i.unit, decimals: i.decimals })),
-    })))
-  }
+  const exportData = () => resultGroups.map((g) => ({
+    group: t(g.groupKey),
+    items: g.items.map((i) => ({ label: t(i.labelKey), value: i.value, unit: i.unit, decimals: i.decimals })),
+  }))
 
   return (
     <div>
@@ -107,7 +105,8 @@ export function DrillingTab({ history, loadedEntry }: DrillingTabProps) {
         <h2 className="text-lg font-semibold tracking-tight text-surface-900 dark:text-white">{t('drilling.title')}</h2>
         <ActionBar
           onSave={() => history.addEntry('drilling', materialId, inputs)}
-          onExportCSV={handleExportCSV}
+          onExportPDF={() => exportPDF(t('drilling.title'), exportData())}
+          onExportXLSX={() => exportXLSX(t('drilling.title'), exportData())}
           onShare={shareUrl}
         />
       </div>
