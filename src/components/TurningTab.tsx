@@ -1,24 +1,58 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { InputField } from './InputField'
 import { MaterialSelect } from './MaterialSelect'
 import { ResultsPanel } from './ResultsPanel'
 import { CalculationSteps } from './CalculationSteps'
+import { QuickPresets } from './QuickPresets'
+import { ActionBar } from './ActionBar'
 import { calculateTurning } from '../calculations/turning'
+import { useUrlSync, decodeState } from '../hooks/useUrlState'
+import { exportCSV, shareUrl } from '../utils/export'
 import type { TurningInputs } from '../calculations/types'
+import type { useHistory, HistoryEntry } from '../hooks/useHistory'
 
-export function TurningTab() {
+const defaultInputs: TurningInputs = {
+  d: 50, vc: 150, f: 0.2, ap: 2, kappaR: 90,
+  kc11: 2100, mc: 0.25, eta: 0.8, Pmachine: 8,
+}
+
+interface TurningTabProps {
+  history: ReturnType<typeof useHistory>
+  loadedEntry: HistoryEntry | null
+}
+
+export function TurningTab({ history, loadedEntry }: TurningTabProps) {
   const { t } = useTranslation()
   const [materialId, setMaterialId] = useState('42crmo4')
-  const [inputs, setInputs] = useState<TurningInputs>({
-    d: 50, vc: 150, f: 0.2, ap: 2, kappaR: 90,
-    kc11: 2100, mc: 0.25, eta: 0.8, Pmachine: 8,
+  const [inputs, setInputs] = useState<TurningInputs>(() => {
+    const decoded = decodeState(window.location.hash)
+    if (decoded?.tab === 'turning' && decoded.inputs) {
+      return { ...defaultInputs, ...decoded.inputs }
+    }
+    return defaultInputs
   })
+
+  useEffect(() => {
+    if (loadedEntry?.tab === 'turning') {
+      setInputs({ ...defaultInputs, ...loadedEntry.inputs })
+      setMaterialId(loadedEntry.materialId)
+    }
+  }, [loadedEntry])
+
+  useUrlSync('turning', materialId, inputs)
+
   const update = (key: keyof TurningInputs, value: number) => setInputs((prev) => ({ ...prev, [key]: value }))
+
+  const applyPreset = (values: Record<string, number>) => {
+    setInputs((prev) => ({ ...prev, ...values }))
+  }
+
   const handleMaterial = (id: string, kc11: number | null, mc: number | null) => {
     setMaterialId(id)
     if (kc11 !== null && mc !== null) setInputs((prev) => ({ ...prev, kc11, mc }))
   }
+
   const { results, steps } = useMemo(() => calculateTurning(inputs), [inputs])
 
   const resultGroups = [
@@ -58,16 +92,33 @@ export function TurningTab() {
     },
   ]
 
+  const handleExportCSV = () => {
+    exportCSV(t('turning.title'), resultGroups.map((g) => ({
+      group: t(g.groupKey),
+      items: g.items.map((i) => ({ label: t(i.labelKey), value: i.value, unit: i.unit, decimals: i.decimals })),
+    })))
+  }
+
   return (
     <div>
-      <h2 className="text-lg font-semibold tracking-tight text-surface-900 dark:text-white mb-5">{t('turning.title')}</h2>
+      <div className="flex items-center justify-between mb-5 flex-wrap gap-3">
+        <h2 className="text-lg font-semibold tracking-tight text-surface-900 dark:text-white">{t('turning.title')}</h2>
+        <ActionBar
+          onSave={() => history.addEntry('turning', materialId, inputs)}
+          onExportCSV={handleExportCSV}
+          onShare={shareUrl}
+        />
+      </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div className="space-y-1">
-          <h3 className="text-xs font-semibold uppercase tracking-wider text-surface-500 dark:text-surface-400 mb-3">
-            {t('common.inputs')}
-          </h3>
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-xs font-semibold uppercase tracking-wider text-surface-500 dark:text-surface-400">
+              {t('common.inputs')}
+            </h3>
+            <QuickPresets tab="turning" onApply={applyPreset} />
+          </div>
           <div className="space-y-2.5 bg-white dark:bg-surface-900 border border-surface-200 dark:border-surface-800 rounded-xl p-4">
-            <MaterialSelect selectedId={materialId} onSelect={handleMaterial} />
+            <MaterialSelect selectedId={materialId} onSelect={handleMaterial} tab="turning" currentVc={inputs.vc} />
             <div className="border-t border-surface-100 dark:border-surface-800 my-2" />
             <InputField label={t('turning.d')} value={inputs.d} unit="mm" onChange={(v) => update('d', v)} step={1} />
             <InputField label={t('turning.vc')} value={inputs.vc} unit="m/min" onChange={(v) => update('vc', v)} step={5} />

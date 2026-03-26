@@ -1,20 +1,47 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { InputField } from './InputField'
 import { MaterialSelect } from './MaterialSelect'
 import { ResultsPanel } from './ResultsPanel'
 import { CalculationSteps } from './CalculationSteps'
+import { QuickPresets } from './QuickPresets'
+import { ActionBar } from './ActionBar'
 import { KengInfo } from './KengInfo'
 import { calculateMilling, calculateKeng } from '../calculations/milling'
+import { useUrlSync, decodeState } from '../hooks/useUrlState'
+import { exportCSV, shareUrl } from '../utils/export'
 import type { MillingInputs } from '../calculations/types'
+import type { useHistory, HistoryEntry } from '../hooks/useHistory'
 
-export function MillingTab() {
+const defaultInputs: MillingInputs = {
+  D: 63, z: 4, fz: 0.3, ap: 3, ae: 20, kappa: 90,
+  kc11: 2100, mc: 0.25, vc: 180, Keng: 1.7, Pmachine: 8,
+}
+
+interface MillingTabProps {
+  history: ReturnType<typeof useHistory>
+  loadedEntry: HistoryEntry | null
+}
+
+export function MillingTab({ history, loadedEntry }: MillingTabProps) {
   const { t } = useTranslation()
   const [materialId, setMaterialId] = useState('42crmo4')
-  const [inputs, setInputs] = useState<MillingInputs>({
-    D: 63, z: 4, fz: 0.3, ap: 3, ae: 20, kappa: 90,
-    kc11: 2100, mc: 0.25, vc: 180, Keng: 1.7, Pmachine: 8,
+  const [inputs, setInputs] = useState<MillingInputs>(() => {
+    const decoded = decodeState(window.location.hash)
+    if (decoded?.tab === 'milling' && decoded.inputs) {
+      return { ...defaultInputs, ...decoded.inputs }
+    }
+    return defaultInputs
   })
+
+  useEffect(() => {
+    if (loadedEntry?.tab === 'milling') {
+      setInputs({ ...defaultInputs, ...loadedEntry.inputs })
+      setMaterialId(loadedEntry.materialId)
+    }
+  }, [loadedEntry])
+
+  useUrlSync('milling', materialId, inputs)
 
   const update = (key: keyof MillingInputs, value: number) => {
     const newInputs = { ...inputs, [key]: value }
@@ -22,6 +49,16 @@ export function MillingTab() {
       newInputs.Keng = parseFloat(calculateKeng(newInputs.ae, newInputs.D).toFixed(3))
     }
     setInputs(newInputs)
+  }
+
+  const applyPreset = (values: Record<string, number>) => {
+    setInputs((prev) => {
+      const next = { ...prev, ...values }
+      if ('ae' in values || 'D' in values) {
+        next.Keng = parseFloat(calculateKeng(next.ae, next.D).toFixed(3))
+      }
+      return next
+    })
   }
 
   const handleMaterial = (id: string, kc11: number | null, mc: number | null) => {
@@ -72,16 +109,33 @@ export function MillingTab() {
     },
   ]
 
+  const handleExportCSV = () => {
+    exportCSV(t('milling.title'), resultGroups.map((g) => ({
+      group: t(g.groupKey),
+      items: g.items.map((i) => ({ label: t(i.labelKey), value: i.value, unit: i.unit, decimals: i.decimals })),
+    })))
+  }
+
   return (
     <div>
-      <h2 className="text-lg font-semibold tracking-tight text-surface-900 dark:text-white mb-5">{t('milling.title')}</h2>
+      <div className="flex items-center justify-between mb-5 flex-wrap gap-3">
+        <h2 className="text-lg font-semibold tracking-tight text-surface-900 dark:text-white">{t('milling.title')}</h2>
+        <ActionBar
+          onSave={() => history.addEntry('milling', materialId, inputs)}
+          onExportCSV={handleExportCSV}
+          onShare={shareUrl}
+        />
+      </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div className="space-y-1">
-          <h3 className="text-xs font-semibold uppercase tracking-wider text-surface-500 dark:text-surface-400 mb-3">
-            {t('common.inputs')}
-          </h3>
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-xs font-semibold uppercase tracking-wider text-surface-500 dark:text-surface-400">
+              {t('common.inputs')}
+            </h3>
+            <QuickPresets tab="milling" onApply={applyPreset} />
+          </div>
           <div className="space-y-2.5 bg-white dark:bg-surface-900 border border-surface-200 dark:border-surface-800 rounded-xl p-4">
-            <MaterialSelect selectedId={materialId} onSelect={handleMaterial} />
+            <MaterialSelect selectedId={materialId} onSelect={handleMaterial} tab="milling" currentVc={inputs.vc} />
             <div className="border-t border-surface-100 dark:border-surface-800 my-2" />
             <InputField label={t('milling.D')} value={inputs.D} unit="mm" onChange={(v) => update('D', v)} step={1} />
             <InputField label={t('milling.z')} value={inputs.z} unit="" onChange={(v) => update('z', v)} step={1} min={1} />

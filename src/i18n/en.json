@@ -8,5 +8,8 @@
   "units": { "mm": "mm", "deg": "°", "Nmm2": "N/mm²", "mmin": "m/min", "kW": "kW", "N": "N", "Nm": "Nm", "rpm": "RPM", "mmmin": "mm/min", "cm3min": "cm³/min", "min": "min", "percent": "%" },
   "kengTable": { "title": "Engagement Factor Reference", "slotting": "Slotting (ae ≈ D)", "fifty": "50% Engagement", "thirty": "30% Engagement", "face": "Face Milling (10–20%)", "highFeed": "High Feed Milling" },
   "groups": { "geometry": "Geometry", "kinematics": "Kinematics", "forces": "Forces", "power": "Power & Utilization" },
+  "presets": { "label": "Quick Select", "roughing": "Roughing", "finishing": "Finishing", "hsc": "HSC", "standard": "Standard", "deep": "Deep Hole", "fast": "Fast" },
+  "actions": { "save": "Save", "share": "Share Link", "shared": "Copied!" },
+  "history": { "title": "History", "empty": "No saved calculations yet.", "clear": "Clear History" },
   "theme": { "light": "Light", "dark": "Dark", "system": "System" }
 }
