@@ -64,6 +64,7 @@ export function MillingTab({ history, loadedEntry }: MillingTabProps) {
     {
       groupKey: 'groups.geometry',
       items: [
+        { labelKey: 'milling.Deff', value: results.Deff, unit: t('units.mm') },
         { labelKey: 'milling.phiS', value: results.phiS, unit: '°' },
         { labelKey: 'milling.ze', value: results.ze, unit: '' },
         { labelKey: 'milling.hm', value: results.hm, unit: t('units.mm') },

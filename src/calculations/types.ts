@@ -13,6 +13,7 @@ export interface MillingInputs {
 }
 
 export interface MillingResults {
+  Deff: number     // Effektiver Fräserdurchmesser [mm]
   phiS: number     // Eingriffswinkel [°]
   ze: number       // Gleichzeitig schneidende Zähne
   n: number        // Drehzahl [U/min]
