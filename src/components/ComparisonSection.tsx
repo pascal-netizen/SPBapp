@@ -68,7 +68,6 @@ export function ComparisonSection({ params, savedIst, savedSoll }: ComparisonSec
   const [isOpen, setIsOpen] = useState(false)
   const [manualMode, setManualMode] = useState(false)
   const [manualIst, setManualIst] = useState<Record<string, string>>({})
-  const [manualSoll, setManualSoll] = useState<Record<string, string>>({})
 
   const parseManual = (raw: string | undefined): number | null => {
     if (raw === undefined || raw === '') return null
@@ -82,7 +81,6 @@ export function ComparisonSection({ params, savedIst, savedSoll }: ComparisonSec
   }
 
   const getSoll = (param: ComparisonParam): number | null => {
-    if (manualMode) return parseManual(manualSoll[param.key])
     return savedSoll?.[param.key] ?? null
   }
 
@@ -167,16 +165,7 @@ export function ComparisonSection({ params, savedIst, savedSoll }: ComparisonSec
                         )}
                       </td>
                       <td className="py-2.5 px-3 text-right font-mono">
-                        {manualMode ? (
-                          <input
-                            type="text"
-                            inputMode="decimal"
-                            value={manualSoll[param.key] ?? ''}
-                            onChange={(e) => setManualSoll((prev) => ({ ...prev, [param.key]: e.target.value }))}
-                            placeholder="—"
-                            className="w-24 ml-auto text-right px-2 py-1 text-sm font-mono border border-surface-200 dark:border-surface-700 rounded-lg bg-white dark:bg-surface-800 text-surface-900 dark:text-surface-100 focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-500 placeholder:text-surface-300 dark:placeholder:text-surface-600"
-                          />
-                        ) : sollVal !== null ? (
+                        {sollVal !== null ? (
                           renderValue(sollVal, param.decimals, param.unit, param.timeFormat)
                         ) : (
                           <span className="text-surface-300 dark:text-surface-600">—</span>
