@@ -56,12 +56,12 @@ export function calculateMilling(input: MillingInputs): { results: MillingResult
     result: `${ze.toFixed(3)}`,
   })
 
-  // Step 3: Drehzahl n [U/min] — basierend auf Deff
-  const n = (vc * 1000) / (Math.PI * Deff)
+  // Step 3: Drehzahl n [U/min] — basierend auf D (Schnittgeschwindigkeit am Außendurchmesser)
+  const n = (vc * 1000) / (Math.PI * D)
   steps.push({
     name: 'Drehzahl n',
-    formula: 'n = (vc × 1000) / (π × Deff) [U/min]',
-    substituted: `n = (${vc} × 1000) / (π × ${Deff.toFixed(2)})`,
+    formula: 'n = (vc × 1000) / (π × D) [U/min]',
+    substituted: `n = (${vc} × 1000) / (π × ${D})`,
     result: `${n.toFixed(2)} U/min`,
   })
 
