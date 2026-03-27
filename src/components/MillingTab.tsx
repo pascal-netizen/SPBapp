@@ -65,6 +65,11 @@ export function MillingTab({ history, loadedEntry }: MillingTabProps) {
 
   const { results, steps } = useMemo(() => calculateMilling(inputs), [inputs])
 
+  const [savedIst, setSavedIst] = useState<Record<string, number> | null>(null)
+  const [savedSoll, setSavedSoll] = useState<Record<string, number> | null>(null)
+
+  const comparisonValues = () => ({ n: results.n, vf: results.vf, P: results.P, th: results.th })
+
   const resultGroups = [
     {
       groupKey: 'groups.geometry',
@@ -152,7 +157,8 @@ export function MillingTab({ history, loadedEntry }: MillingTabProps) {
       <div className="flex items-center justify-between mb-5 flex-wrap gap-3">
         <h2 className="text-lg font-semibold tracking-tight text-surface-900 dark:text-white">{t('milling.title')}</h2>
         <ActionBar
-          onSave={() => history.addEntry('milling', materialId, inputs)}
+          onSaveIst={() => { history.addEntry('milling', materialId, inputs); setSavedIst(comparisonValues()) }}
+          onSaveSoll={() => { history.addEntry('milling', materialId, inputs); setSavedSoll(comparisonValues()) }}
           onExportPDF={() => exportPDF(t('milling.title'), exportData())}
           onExportXLSX={() => exportXLSX(t('milling.title'), exportData())}
           onShare={shareUrl}
@@ -196,18 +202,14 @@ export function MillingTab({ history, loadedEntry }: MillingTabProps) {
       </div>
       <CalculationSteps steps={steps} />
       <ComparisonSection
-        tab="milling"
         params={[
           { key: 'n', labelKey: 'milling.n', unit: t('units.rpm'), decimals: 0, sollValue: results.n },
           { key: 'vf', labelKey: 'milling.vf', unit: t('units.mmmin'), decimals: 0, sollValue: results.vf },
           { key: 'P', labelKey: 'milling.P', unit: t('units.kW'), decimals: 1, sollValue: results.P },
           { key: 'th', labelKey: 'milling.th', unit: t('units.min'), decimals: 2, sollValue: results.th, timeFormat: true },
         ]}
-        historyEntries={history.entries}
-        calculateFromInputs={(inputs) => {
-          const r = calculateMilling({ ...defaultInputs, ...inputs }).results
-          return { n: r.n, vf: r.vf, P: r.P, th: r.th }
-        }}
+        savedIst={savedIst}
+        savedSoll={savedSoll}
       />
     </div>
   )

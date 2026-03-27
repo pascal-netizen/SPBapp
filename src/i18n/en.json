@@ -9,8 +9,8 @@
   "kengTable": { "title": "Engagement Factor Reference", "slotting": "Slotting (ae ≈ D)", "fifty": "50% Engagement", "thirty": "30% Engagement", "face": "Face Milling (10–20%)", "highFeed": "High Feed Milling" },
   "groups": { "geometry": "Geometry", "kinematics": "Kinematics", "forces": "Forces", "power": "Power & Utilization" },
   "inputGroups": { "material": "Material & Properties", "toolGeometry": "Tool Geometry", "technology": "Technology Parameters", "machine": "Machine", "path": "Machining Path" },
-  "actions": { "save": "Save", "saved": "Saved!", "share": "Share Link", "shared": "Copied!" },
+  "actions": { "saveIst": "Save Actual", "saveSoll": "Save Target", "saved": "Saved!", "share": "Share Link", "shared": "Copied!" },
   "history": { "title": "History", "empty": "No saved calculations yet.", "clear": "Clear History" },
-  "comparison": { "title": "Target vs. Actual", "fromHistory": "From History", "manual": "Enter Manually", "selectEntry": "Select history entry…", "parameter": "Parameter", "soll": "Target", "ist": "Actual", "diff": "Difference", "diffPct": "Difference %" },
+  "comparison": { "title": "Target vs. Actual", "manual": "Enter manually", "parameter": "Parameter", "soll": "Target", "ist": "Actual", "diff": "Difference", "diffPct": "Difference %", "hint": "Use the buttons above to save values as Actual or Target" },
   "theme": { "light": "Light", "dark": "Dark", "system": "System" }
 }

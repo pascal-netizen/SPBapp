@@ -56,6 +56,11 @@ export function TurningTab({ history, loadedEntry }: TurningTabProps) {
 
   const { results, steps } = useMemo(() => calculateTurning(inputs), [inputs])
 
+  const [savedIst, setSavedIst] = useState<Record<string, number> | null>(null)
+  const [savedSoll, setSavedSoll] = useState<Record<string, number> | null>(null)
+
+  const comparisonValues = () => ({ n: results.n, vf: results.vf, P: results.P, th: results.th })
+
   const resultGroups = [
     {
       groupKey: 'groups.geometry',
@@ -138,7 +143,8 @@ export function TurningTab({ history, loadedEntry }: TurningTabProps) {
       <div className="flex items-center justify-between mb-5 flex-wrap gap-3">
         <h2 className="text-lg font-semibold tracking-tight text-surface-900 dark:text-white">{t('turning.title')}</h2>
         <ActionBar
-          onSave={() => history.addEntry('turning', materialId, inputs)}
+          onSaveIst={() => { history.addEntry('turning', materialId, inputs); setSavedIst(comparisonValues()) }}
+          onSaveSoll={() => { history.addEntry('turning', materialId, inputs); setSavedSoll(comparisonValues()) }}
           onExportPDF={() => exportPDF(t('turning.title'), exportData())}
           onExportXLSX={() => exportXLSX(t('turning.title'), exportData())}
           onShare={shareUrl}
@@ -180,18 +186,14 @@ export function TurningTab({ history, loadedEntry }: TurningTabProps) {
       </div>
       <CalculationSteps steps={steps} />
       <ComparisonSection
-        tab="turning"
         params={[
           { key: 'n', labelKey: 'turning.n', unit: t('units.rpm'), decimals: 0, sollValue: results.n },
           { key: 'vf', labelKey: 'turning.vf', unit: t('units.mmmin'), decimals: 0, sollValue: results.vf },
           { key: 'P', labelKey: 'turning.P', unit: t('units.kW'), decimals: 1, sollValue: results.P },
           { key: 'th', labelKey: 'turning.th', unit: t('units.min'), decimals: 2, sollValue: results.th, timeFormat: true },
         ]}
-        historyEntries={history.entries}
-        calculateFromInputs={(inputs) => {
-          const r = calculateTurning({ ...defaultInputs, ...inputs }).results
-          return { n: r.n, vf: r.vf, P: r.P, th: r.th }
-        }}
+        savedIst={savedIst}
+        savedSoll={savedSoll}
       />
     </div>
   )

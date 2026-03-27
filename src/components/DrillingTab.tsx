@@ -56,6 +56,11 @@ export function DrillingTab({ history, loadedEntry }: DrillingTabProps) {
 
   const { results, steps } = useMemo(() => calculateDrilling(inputs), [inputs])
 
+  const [savedIst, setSavedIst] = useState<Record<string, number> | null>(null)
+  const [savedSoll, setSavedSoll] = useState<Record<string, number> | null>(null)
+
+  const comparisonValues = () => ({ n: results.n, vf: results.vf, P: results.P, th: results.th })
+
   const resultGroups = [
     {
       groupKey: 'groups.geometry',
@@ -139,7 +144,8 @@ export function DrillingTab({ history, loadedEntry }: DrillingTabProps) {
       <div className="flex items-center justify-between mb-5 flex-wrap gap-3">
         <h2 className="text-lg font-semibold tracking-tight text-surface-900 dark:text-white">{t('drilling.title')}</h2>
         <ActionBar
-          onSave={() => history.addEntry('drilling', materialId, inputs)}
+          onSaveIst={() => { history.addEntry('drilling', materialId, inputs); setSavedIst(comparisonValues()) }}
+          onSaveSoll={() => { history.addEntry('drilling', materialId, inputs); setSavedSoll(comparisonValues()) }}
           onExportPDF={() => exportPDF(t('drilling.title'), exportData())}
           onExportXLSX={() => exportXLSX(t('drilling.title'), exportData())}
           onShare={shareUrl}
@@ -179,18 +185,14 @@ export function DrillingTab({ history, loadedEntry }: DrillingTabProps) {
       </div>
       <CalculationSteps steps={steps} />
       <ComparisonSection
-        tab="drilling"
         params={[
           { key: 'n', labelKey: 'drilling.n', unit: t('units.rpm'), decimals: 0, sollValue: results.n },
           { key: 'vf', labelKey: 'drilling.vf', unit: t('units.mmmin'), decimals: 0, sollValue: results.vf },
           { key: 'P', labelKey: 'drilling.P', unit: t('units.kW'), decimals: 1, sollValue: results.P },
           { key: 'th', labelKey: 'drilling.th', unit: t('units.min'), decimals: 2, sollValue: results.th, timeFormat: true },
         ]}
-        historyEntries={history.entries}
-        calculateFromInputs={(inputs) => {
-          const r = calculateDrilling({ ...defaultInputs, ...inputs }).results
-          return { n: r.n, vf: r.vf, P: r.P, th: r.th }
-        }}
+        savedIst={savedIst}
+        savedSoll={savedSoll}
       />
     </div>
   )

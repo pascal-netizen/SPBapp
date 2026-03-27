@@ -9,8 +9,8 @@
   "kengTable": { "title": "Eingriffsfaktor-Referenz", "slotting": "Nutfräsen (ae ≈ D)", "fifty": "50% Eingriff", "thirty": "30% Eingriff", "face": "Planfräsen (10–20%)", "highFeed": "High Feed Fräsen" },
   "groups": { "geometry": "Geometrie", "kinematics": "Kinematik", "forces": "Kräfte", "power": "Leistung & Auslastung" },
   "inputGroups": { "material": "Werkstoff & Materialkennwerte", "toolGeometry": "Werkzeuggeometrie", "technology": "Technologieparameter", "machine": "Maschine", "path": "Bearbeitungsweg" },
-  "actions": { "save": "Speichern", "saved": "Gespeichert!", "share": "Link teilen", "shared": "Kopiert!" },
+  "actions": { "saveIst": "IST speichern", "saveSoll": "SOLL speichern", "saved": "Gespeichert!", "share": "Link teilen", "shared": "Kopiert!" },
   "history": { "title": "Verlauf", "empty": "Noch keine gespeicherten Berechnungen.", "clear": "Verlauf löschen" },
-  "comparison": { "title": "SOLL-IST Vergleich", "fromHistory": "Aus Verlauf", "manual": "Manuell eingeben", "selectEntry": "Verlaufseintrag wählen…", "parameter": "Parameter", "soll": "SOLL", "ist": "IST", "diff": "Differenzwert", "diffPct": "Differenzwert in %" },
+  "comparison": { "title": "SOLL-IST Vergleich", "manual": "Manuell eingeben", "parameter": "Parameter", "soll": "SOLL", "ist": "IST", "diff": "Differenzwert", "diffPct": "Differenzwert in %", "hint": "Werte über die Buttons oben als IST oder SOLL speichern" },
   "theme": { "light": "Hell", "dark": "Dunkel", "system": "System" }
 }

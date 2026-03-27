@@ -1,7 +1,5 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import type { HistoryEntry } from '../hooks/useHistory'
-import type { Tab } from './TabNavigation'
 
 interface ComparisonParam {
   key: string
@@ -13,13 +11,10 @@ interface ComparisonParam {
 }
 
 interface ComparisonSectionProps {
-  tab: Tab
   params: ComparisonParam[]
-  historyEntries: HistoryEntry[]
-  calculateFromInputs: (inputs: Record<string, number>) => Record<string, number>
+  savedIst: Record<string, number> | null
+  savedSoll: Record<string, number> | null
 }
-
-type IstSource = 'history' | 'manual'
 
 function fmtValue(value: number, decimals: number): string {
   return value.toLocaleString('de-DE', {
@@ -35,9 +30,9 @@ function fmtTime(minutes: number): string {
   return s > 0 ? `${m} min ${s} s` : `${m} min`
 }
 
-function fmtDelta(soll: number, ist: number, decimals: number, timeFormat?: boolean): { abs: string; pct: string; color: string } {
-  const diff = ist - soll
-  const pctVal = soll !== 0 ? (diff / soll) * 100 : 0
+function fmtDelta(ist: number, soll: number, decimals: number, timeFormat?: boolean): { abs: string; pct: string; color: string } {
+  const diff = soll - ist
+  const pctVal = ist !== 0 ? (diff / ist) * 100 : 0
   const absPct = Math.abs(pctVal)
 
   const color = absPct < 5 ? 'text-green-600 dark:text-green-400' : absPct < 15 ? 'text-amber-600 dark:text-amber-400' : 'text-red-600 dark:text-red-400'
@@ -58,38 +53,35 @@ function fmtDelta(soll: number, ist: number, decimals: number, timeFormat?: bool
   return { abs: absStr, pct: pctStr, color }
 }
 
-const tabLabels: Record<string, string> = { milling: 'tabs.milling', turning: 'tabs.turning', drilling: 'tabs.drilling' }
+function renderValue(value: number, decimals: number, unit: string, timeFormat?: boolean) {
+  return (
+    <span className="text-surface-900 dark:text-white">
+      {timeFormat ? fmtTime(value) : fmtValue(value, decimals)} {!timeFormat && <span className="text-surface-400 dark:text-surface-400 text-xs">{unit}</span>}
+    </span>
+  )
+}
 
-export function ComparisonSection({ tab, params, historyEntries, calculateFromInputs }: ComparisonSectionProps) {
+export function ComparisonSection({ params, savedIst, savedSoll }: ComparisonSectionProps) {
   const { t } = useTranslation()
   const [isOpen, setIsOpen] = useState(false)
-  const [source, setSource] = useState<IstSource>('history')
-  const [selectedEntryId, setSelectedEntryId] = useState<string | null>(null)
-  const [manualValues, setManualValues] = useState<Record<string, string>>({})
+  const [manualMode, setManualMode] = useState(false)
+  const [manualIst, setManualIst] = useState<Record<string, string>>({})
+  const [manualSoll, setManualSoll] = useState<Record<string, string>>({})
 
-  const tabEntries = historyEntries.filter((e) => e.tab === tab)
-  const selectedEntry = tabEntries.find((e) => e.id === selectedEntryId)
-
-  const calculatedIst = source === 'history' && selectedEntry
-    ? calculateFromInputs(selectedEntry.inputs)
-    : null
-
-  const getIstValue = (param: ComparisonParam): number | null => {
-    if (source === 'history' && calculatedIst) {
-      return calculatedIst[param.key] ?? null
-    }
-    if (source === 'manual') {
-      const raw = manualValues[param.key]
-      if (raw === undefined || raw === '') return null
-      const normalized = raw.replace(',', '.')
-      const val = parseFloat(normalized)
-      return isFinite(val) ? val : null
-    }
-    return null
+  const parseManual = (raw: string | undefined): number | null => {
+    if (raw === undefined || raw === '') return null
+    const val = parseFloat(raw.replace(',', '.'))
+    return isFinite(val) ? val : null
   }
 
-  const setManual = (key: string, value: string) => {
-    setManualValues((prev) => ({ ...prev, [key]: value }))
+  const getIst = (param: ComparisonParam): number | null => {
+    if (manualMode) return parseManual(manualIst[param.key])
+    return savedIst?.[param.key] ?? null
+  }
+
+  const getSoll = (param: ComparisonParam): number | null => {
+    if (manualMode) return parseManual(manualSoll[param.key])
+    return savedSoll?.[param.key] ?? null
   }
 
   return (
@@ -103,6 +95,9 @@ export function ComparisonSection({ tab, params, historyEntries, calculateFromIn
             <path fillRule="evenodd" d="M15.312 11.424a5.5 5.5 0 01-9.201 2.466l-.312-.311h2.451a.75.75 0 000-1.5H4.5a.75.75 0 00-.75.75v3.75a.75.75 0 001.5 0v-2.033a7 7 0 0011.712-3.138.75.75 0 00-1.449-.389zm-10.624-3.85a5.5 5.5 0 019.201-2.465l.312.31H11.75a.75.75 0 000 1.5h3.75a.75.75 0 00.75-.75V2.42a.75.75 0 00-1.5 0v2.033A7 7 0 003.038 7.588a.75.75 0 001.45.388z" clipRule="evenodd" />
           </svg>
           {t('comparison.title')}
+          {!manualMode && savedIst && savedSoll && (
+            <span className="ml-1 w-2 h-2 rounded-full bg-green-500" />
+          )}
         </span>
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -115,45 +110,20 @@ export function ComparisonSection({ tab, params, historyEntries, calculateFromIn
       </button>
       {isOpen && (
         <div className="px-5 pb-5 border-t border-surface-100 dark:border-surface-800">
-          <div className="pt-4 pb-3 flex flex-col sm:flex-row sm:items-center gap-3">
-            {/* Source toggle */}
-            <div className="flex rounded-lg overflow-hidden border border-surface-200 dark:border-surface-700 shrink-0">
-              <button
-                onClick={() => setSource('history')}
-                className={`px-3 py-1.5 text-xs font-medium cursor-pointer transition-colors ${
-                  source === 'history'
-                    ? 'bg-primary-600 text-white'
-                    : 'bg-white dark:bg-surface-800 text-surface-600 dark:text-surface-400 hover:bg-surface-50 dark:hover:bg-surface-700'
-                }`}
-              >
-                {t('comparison.fromHistory')}
-              </button>
-              <button
-                onClick={() => setSource('manual')}
-                className={`px-3 py-1.5 text-xs font-medium cursor-pointer transition-colors ${
-                  source === 'manual'
-                    ? 'bg-primary-600 text-white'
-                    : 'bg-white dark:bg-surface-800 text-surface-600 dark:text-surface-400 hover:bg-surface-50 dark:hover:bg-surface-700'
-                }`}
-              >
-                {t('comparison.manual')}
-              </button>
-            </div>
-
-            {/* History selector */}
-            {source === 'history' && (
-              <select
-                value={selectedEntryId ?? ''}
-                onChange={(e) => setSelectedEntryId(e.target.value || null)}
-                className="flex-1 min-w-0 px-3 py-2 text-sm border border-surface-200 dark:border-surface-700 rounded-lg bg-white dark:bg-surface-800 text-surface-900 dark:text-surface-100 focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-500"
-              >
-                <option value="">{t('comparison.selectEntry')}</option>
-                {tabEntries.map((entry) => (
-                  <option key={entry.id} value={entry.id}>
-                    {t(tabLabels[entry.tab])} — {new Date(entry.timestamp).toLocaleString()}
-                  </option>
-                ))}
-              </select>
+          <div className="pt-4 pb-3 flex items-center gap-3">
+            <label className="flex items-center gap-2 text-xs text-surface-500 dark:text-surface-400 cursor-pointer select-none">
+              <input
+                type="checkbox"
+                checked={manualMode}
+                onChange={(e) => setManualMode(e.target.checked)}
+                className="rounded border-surface-300 dark:border-surface-600 text-primary-600 focus:ring-primary-500"
+              />
+              {t('comparison.manual')}
+            </label>
+            {!manualMode && !savedIst && !savedSoll && (
+              <span className="text-xs text-surface-400 dark:text-surface-400">
+                {t('comparison.hint')}
+              </span>
             )}
           </div>
 
@@ -171,29 +141,41 @@ export function ComparisonSection({ tab, params, historyEntries, calculateFromIn
               </thead>
               <tbody>
                 {params.map((param) => {
-                  const sollValue = getIstValue(param)
-                  const delta = sollValue !== null ? fmtDelta(param.sollValue, sollValue, param.decimals, param.timeFormat) : null
+                  const istVal = getIst(param)
+                  const sollVal = getSoll(param)
+                  const delta = istVal !== null && sollVal !== null ? fmtDelta(istVal, sollVal, param.decimals, param.timeFormat) : null
 
                   return (
                     <tr key={param.key} className="border-b border-surface-100 dark:border-surface-800 last:border-0">
                       <td className="py-2.5 pr-3 text-surface-700 dark:text-surface-300 font-medium">{t(param.labelKey)}</td>
-                      <td className="py-2.5 px-3 text-right font-mono text-surface-900 dark:text-white">
-                        {param.timeFormat ? fmtTime(param.sollValue) : fmtValue(param.sollValue, param.decimals)} {!param.timeFormat && <span className="text-surface-400 dark:text-surface-400 text-xs">{param.unit}</span>}
-                      </td>
                       <td className="py-2.5 px-3 text-right font-mono">
-                        {source === 'manual' ? (
+                        {manualMode ? (
                           <input
                             type="text"
                             inputMode="decimal"
-                            value={manualValues[param.key] ?? ''}
-                            onChange={(e) => setManual(param.key, e.target.value)}
+                            value={manualIst[param.key] ?? ''}
+                            onChange={(e) => setManualIst((prev) => ({ ...prev, [param.key]: e.target.value }))}
                             placeholder="—"
                             className="w-24 ml-auto text-right px-2 py-1 text-sm font-mono border border-surface-200 dark:border-surface-700 rounded-lg bg-white dark:bg-surface-800 text-surface-900 dark:text-surface-100 focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-500 placeholder:text-surface-300 dark:placeholder:text-surface-600"
                           />
-                        ) : sollValue !== null ? (
-                          <span className="text-surface-900 dark:text-white">
-                            {param.timeFormat ? fmtTime(sollValue) : fmtValue(sollValue, param.decimals)} {!param.timeFormat && <span className="text-surface-400 dark:text-surface-400 text-xs">{param.unit}</span>}
-                          </span>
+                        ) : istVal !== null ? (
+                          renderValue(istVal, param.decimals, param.unit, param.timeFormat)
+                        ) : (
+                          <span className="text-surface-300 dark:text-surface-600">—</span>
+                        )}
+                      </td>
+                      <td className="py-2.5 px-3 text-right font-mono">
+                        {manualMode ? (
+                          <input
+                            type="text"
+                            inputMode="decimal"
+                            value={manualSoll[param.key] ?? ''}
+                            onChange={(e) => setManualSoll((prev) => ({ ...prev, [param.key]: e.target.value }))}
+                            placeholder="—"
+                            className="w-24 ml-auto text-right px-2 py-1 text-sm font-mono border border-surface-200 dark:border-surface-700 rounded-lg bg-white dark:bg-surface-800 text-surface-900 dark:text-surface-100 focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-500 placeholder:text-surface-300 dark:placeholder:text-surface-600"
+                          />
+                        ) : sollVal !== null ? (
+                          renderValue(sollVal, param.decimals, param.unit, param.timeFormat)
                         ) : (
                           <span className="text-surface-300 dark:text-surface-600">—</span>
                         )}
