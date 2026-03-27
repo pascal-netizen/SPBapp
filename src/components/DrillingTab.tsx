@@ -72,17 +72,17 @@ export function DrillingTab({ history, loadedEntry }: DrillingTabProps) {
     {
       groupKey: 'groups.forces',
       items: [
-        { labelKey: 'drilling.kc', value: results.kc, unit: t('units.Nmm2') },
-        { labelKey: 'drilling.Fc', value: results.Fc, unit: t('units.N') },
-        { labelKey: 'drilling.Ff', value: results.Ff, unit: t('units.N') },
+        { labelKey: 'drilling.kc', value: results.kc, unit: t('units.Nmm2'), decimals: 0 },
+        { labelKey: 'drilling.Fc', value: results.Fc, unit: t('units.N'), decimals: 0 },
+        { labelKey: 'drilling.Ff', value: results.Ff, unit: t('units.N'), decimals: 0 },
       ],
     },
     {
       groupKey: 'groups.power',
       items: [
-        { labelKey: 'drilling.M', value: results.M, unit: t('units.Nm') },
-        { labelKey: 'drilling.Pc', value: results.Pc, unit: t('units.kW') },
-        { labelKey: 'drilling.P', value: results.P, unit: t('units.kW') },
+        { labelKey: 'drilling.M', value: results.M, unit: t('units.Nm'), decimals: 1 },
+        { labelKey: 'drilling.Pc', value: results.Pc, unit: t('units.kW'), decimals: 1 },
+        { labelKey: 'drilling.P', value: results.P, unit: t('units.kW'), decimals: 1 },
         { labelKey: 'drilling.Q', value: results.Q, unit: t('units.cm3min') },
         { labelKey: 'drilling.th', value: results.th, unit: t('units.min') },
         { labelKey: 'common.utilization', value: results.utilization, unit: '%', decimals: 1 },

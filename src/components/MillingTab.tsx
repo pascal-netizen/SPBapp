@@ -81,18 +81,18 @@ export function MillingTab({ history, loadedEntry }: MillingTabProps) {
     {
       groupKey: 'groups.forces',
       items: [
-        { labelKey: 'milling.kc', value: results.kc, unit: t('units.Nmm2') },
-        { labelKey: 'milling.Fc', value: results.Fc, unit: t('units.N') },
-        { labelKey: 'milling.Ff', value: results.Ff, unit: t('units.N') },
-        { labelKey: 'milling.Fa', value: results.Fa, unit: t('units.N') },
-        { labelKey: 'milling.FfMean', value: results.FfMean, unit: t('units.N') },
+        { labelKey: 'milling.kc', value: results.kc, unit: t('units.Nmm2'), decimals: 0 },
+        { labelKey: 'milling.Fc', value: results.Fc, unit: t('units.N'), decimals: 0 },
+        { labelKey: 'milling.Ff', value: results.Ff, unit: t('units.N'), decimals: 0 },
+        { labelKey: 'milling.Fa', value: results.Fa, unit: t('units.N'), decimals: 0 },
+        { labelKey: 'milling.FfMean', value: results.FfMean, unit: t('units.N'), decimals: 0 },
       ],
     },
     {
       groupKey: 'groups.power',
       items: [
-        { labelKey: 'milling.M', value: results.M, unit: t('units.Nm') },
-        { labelKey: 'milling.P', value: results.P, unit: t('units.kW') },
+        { labelKey: 'milling.M', value: results.M, unit: t('units.Nm'), decimals: 1 },
+        { labelKey: 'milling.P', value: results.P, unit: t('units.kW'), decimals: 1 },
         { labelKey: 'milling.Q', value: results.Q, unit: t('units.cm3min') },
         { labelKey: 'common.utilization', value: results.utilization, unit: '%', decimals: 1 },
       ],

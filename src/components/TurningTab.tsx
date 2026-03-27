@@ -70,18 +70,18 @@ export function TurningTab({ history, loadedEntry }: TurningTabProps) {
     {
       groupKey: 'groups.forces',
       items: [
-        { labelKey: 'turning.kc', value: results.kc, unit: t('units.Nmm2') },
-        { labelKey: 'turning.Fc', value: results.Fc, unit: t('units.N') },
-        { labelKey: 'turning.Ff', value: results.Ff, unit: t('units.N') },
-        { labelKey: 'turning.Fp', value: results.Fp, unit: t('units.N') },
+        { labelKey: 'turning.kc', value: results.kc, unit: t('units.Nmm2'), decimals: 0 },
+        { labelKey: 'turning.Fc', value: results.Fc, unit: t('units.N'), decimals: 0 },
+        { labelKey: 'turning.Ff', value: results.Ff, unit: t('units.N'), decimals: 0 },
+        { labelKey: 'turning.Fp', value: results.Fp, unit: t('units.N'), decimals: 0 },
       ],
     },
     {
       groupKey: 'groups.power',
       items: [
-        { labelKey: 'turning.Pc', value: results.Pc, unit: t('units.kW') },
-        { labelKey: 'turning.P', value: results.P, unit: t('units.kW') },
-        { labelKey: 'turning.M', value: results.M, unit: t('units.Nm') },
+        { labelKey: 'turning.Pc', value: results.Pc, unit: t('units.kW'), decimals: 1 },
+        { labelKey: 'turning.P', value: results.P, unit: t('units.kW'), decimals: 1 },
+        { labelKey: 'turning.M', value: results.M, unit: t('units.Nm'), decimals: 1 },
         { labelKey: 'turning.Q', value: results.Q, unit: t('units.cm3min') },
         { labelKey: 'common.utilization', value: results.utilization, unit: '%', decimals: 1 },
       ],
