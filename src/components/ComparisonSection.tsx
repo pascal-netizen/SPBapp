@@ -163,16 +163,16 @@ export function ComparisonSection({ tab, params, historyEntries, calculateFromIn
               <thead>
                 <tr className="border-b border-surface-200 dark:border-surface-700">
                   <th className="text-left py-2 pr-3 text-xs font-semibold uppercase tracking-wider text-surface-500 dark:text-surface-400">{t('comparison.parameter')}</th>
-                  <th className="text-right py-2 px-3 text-xs font-semibold uppercase tracking-wider text-surface-500 dark:text-surface-400">{t('comparison.soll')}</th>
                   <th className="text-right py-2 px-3 text-xs font-semibold uppercase tracking-wider text-surface-500 dark:text-surface-400">{t('comparison.ist')}</th>
+                  <th className="text-right py-2 px-3 text-xs font-semibold uppercase tracking-wider text-surface-500 dark:text-surface-400">{t('comparison.soll')}</th>
                   <th className="text-right py-2 px-3 text-xs font-semibold uppercase tracking-wider text-surface-500 dark:text-surface-400">{t('comparison.diff')}</th>
                   <th className="text-right py-2 pl-3 text-xs font-semibold uppercase tracking-wider text-surface-500 dark:text-surface-400">{t('comparison.diffPct')}</th>
                 </tr>
               </thead>
               <tbody>
                 {params.map((param) => {
-                  const istValue = getIstValue(param)
-                  const delta = istValue !== null ? fmtDelta(param.sollValue, istValue, param.decimals, param.timeFormat) : null
+                  const sollValue = getIstValue(param)
+                  const delta = sollValue !== null ? fmtDelta(param.sollValue, sollValue, param.decimals, param.timeFormat) : null
 
                   return (
                     <tr key={param.key} className="border-b border-surface-100 dark:border-surface-800 last:border-0">
@@ -190,9 +190,9 @@ export function ComparisonSection({ tab, params, historyEntries, calculateFromIn
                             placeholder="—"
                             className="w-24 ml-auto text-right px-2 py-1 text-sm font-mono border border-surface-200 dark:border-surface-700 rounded-lg bg-white dark:bg-surface-800 text-surface-900 dark:text-surface-100 focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-500 placeholder:text-surface-300 dark:placeholder:text-surface-600"
                           />
-                        ) : istValue !== null ? (
+                        ) : sollValue !== null ? (
                           <span className="text-surface-900 dark:text-white">
-                            {param.timeFormat ? fmtTime(istValue) : fmtValue(istValue, param.decimals)} {!param.timeFormat && <span className="text-surface-400 dark:text-surface-400 text-xs">{param.unit}</span>}
+                            {param.timeFormat ? fmtTime(sollValue) : fmtValue(sollValue, param.decimals)} {!param.timeFormat && <span className="text-surface-400 dark:text-surface-400 text-xs">{param.unit}</span>}
                           </span>
                         ) : (
                           <span className="text-surface-300 dark:text-surface-600">—</span>
