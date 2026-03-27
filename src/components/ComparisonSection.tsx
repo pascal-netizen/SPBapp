@@ -33,9 +33,11 @@ function fmtTime(minutes: number): string {
 function fmtDelta(ist: number, soll: number, decimals: number, timeFormat?: boolean): { abs: string; pct: string; color: string } {
   const diff = soll - ist
   const pctVal = ist !== 0 ? (diff / ist) * 100 : 0
-  const absPct = Math.abs(pctVal)
-
-  const color = absPct < 5 ? 'text-green-600 dark:text-green-400' : absPct < 15 ? 'text-amber-600 dark:text-amber-400' : 'text-red-600 dark:text-red-400'
+  const color = diff > 0
+    ? 'text-green-600 dark:text-green-400'
+    : diff < 0
+      ? 'text-red-600 dark:text-red-400'
+      : 'text-surface-500 dark:text-surface-400'
 
   let absStr: string
   if (timeFormat) {
