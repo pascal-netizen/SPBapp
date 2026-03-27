@@ -59,7 +59,7 @@ export function DrillingTab({ history, loadedEntry }: DrillingTabProps) {
   const [savedIst, setSavedIst] = useState<Record<string, number> | null>(null)
   const [savedSoll, setSavedSoll] = useState<Record<string, number> | null>(null)
 
-  const comparisonValues = () => ({ n: results.n, vf: results.vf, P: results.P, th: results.th })
+  const comparisonValues = () => ({ n: results.n, vf: results.vf, th: results.th })
 
   const resultGroups = [
     {
@@ -188,8 +188,7 @@ export function DrillingTab({ history, loadedEntry }: DrillingTabProps) {
         params={[
           { key: 'n', labelKey: 'drilling.n', unit: t('units.rpm'), decimals: 0, sollValue: results.n },
           { key: 'vf', labelKey: 'drilling.vf', unit: t('units.mmmin'), decimals: 0, sollValue: results.vf },
-          { key: 'P', labelKey: 'drilling.P', unit: t('units.kW'), decimals: 1, sollValue: results.P },
-          { key: 'th', labelKey: 'drilling.th', unit: t('units.min'), decimals: 2, sollValue: results.th, timeFormat: true },
+          { key: 'th', labelKey: 'drilling.th', unit: t('units.min'), decimals: 2, sollValue: results.th, timeFormat: true, invertColor: true },
         ]}
         savedIst={savedIst}
         savedSoll={savedSoll}

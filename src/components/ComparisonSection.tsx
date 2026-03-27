@@ -8,6 +8,7 @@ interface ComparisonParam {
   decimals: number
   sollValue: number
   timeFormat?: boolean
+  invertColor?: boolean
 }
 
 interface ComparisonSectionProps {
@@ -30,12 +31,14 @@ function fmtTime(minutes: number): string {
   return s > 0 ? `${m} min ${s} s` : `${m} min`
 }
 
-function fmtDelta(ist: number, soll: number, decimals: number, timeFormat?: boolean): { abs: string; pct: string; color: string } {
+function fmtDelta(ist: number, soll: number, decimals: number, timeFormat?: boolean, invertColor?: boolean): { abs: string; pct: string; color: string } {
   const diff = soll - ist
   const pctVal = ist !== 0 ? (diff / ist) * 100 : 0
-  const color = diff > 0
+  const positive = invertColor ? diff < 0 : diff > 0
+  const negative = invertColor ? diff > 0 : diff < 0
+  const color = positive
     ? 'text-green-600 dark:text-green-400'
-    : diff < 0
+    : negative
       ? 'text-red-600 dark:text-red-400'
       : 'text-surface-500 dark:text-surface-400'
 
@@ -143,7 +146,7 @@ export function ComparisonSection({ params, savedIst, savedSoll }: ComparisonSec
                 {params.map((param) => {
                   const istVal = getIst(param)
                   const sollVal = getSoll(param)
-                  const delta = istVal !== null && sollVal !== null ? fmtDelta(istVal, sollVal, param.decimals, param.timeFormat) : null
+                  const delta = istVal !== null && sollVal !== null ? fmtDelta(istVal, sollVal, param.decimals, param.timeFormat, param.invertColor) : null
 
                   return (
                     <tr key={param.key} className="border-b border-surface-100 dark:border-surface-800 last:border-0">
