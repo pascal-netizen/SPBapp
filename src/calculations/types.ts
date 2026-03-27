@@ -10,6 +10,7 @@ export interface MillingInputs {
   vc: number       // Schnittgeschwindigkeit [m/min]
   Keng: number     // Eingriffsfaktor (editierbar)
   Pmachine: number // Maschinenleistung [kW]
+  L: number        // Bearbeitungsweg [mm]
 }
 
 export interface MillingResults {
@@ -30,6 +31,7 @@ export interface MillingResults {
   P: number        // Spindelleistung [kW]
   utilization: number // Maschinenauslastung [%]
   Q: number        // Zeitspanvolumen [cm³/min]
+  th: number       // Bearbeitungszeit [min]
 }
 
 export interface TurningInputs {
@@ -42,6 +44,7 @@ export interface TurningInputs {
   mc: number       // Kienzle-Exponent
   eta: number      // Wirkungsgrad
   Pmachine: number // Maschinenleistung [kW]
+  L: number        // Bearbeitungsweg [mm]
 }
 
 export interface TurningResults {
@@ -58,6 +61,7 @@ export interface TurningResults {
   P: number        // Antriebsleistung [kW]
   M: number        // Drehmoment [Nm]
   Q: number        // Zeitspanvolumen [cm³/min]
+  th: number       // Bearbeitungszeit [min]
   utilization: number // Maschinenauslastung [%]
 }
 

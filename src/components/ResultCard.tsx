@@ -7,6 +7,7 @@ interface ResultCardProps {
   unit: string
   decimals?: number
   warning?: boolean
+  hero?: boolean
 }
 
 function fmt(value: number, decimals: number): string {
@@ -37,7 +38,7 @@ async function copyToClipboard(text: string): Promise<boolean> {
   }
 }
 
-export function ResultCard({ label, value, unit, decimals = 2, warning = false }: ResultCardProps) {
+export function ResultCard({ label, value, unit, decimals = 2, warning = false, hero = false }: ResultCardProps) {
   const { t } = useTranslation()
   const [copied, setCopied] = useState(false)
   const display = fmt(value, decimals)
@@ -55,21 +56,25 @@ export function ResultCard({ label, value, unit, decimals = 2, warning = false }
       onClick={copy}
       title={`${display} ${unit}`}
       className={`p-3.5 rounded-xl border cursor-pointer group relative ${
-        warning
-          ? 'border-red-200 dark:border-red-900/50 bg-red-50 dark:bg-red-950/30'
-          : 'border-surface-200 dark:border-surface-800 bg-white dark:bg-surface-900 hover:border-primary-300 dark:hover:border-primary-700'
+        hero
+          ? 'col-span-1 sm:col-span-2 border-accent-500/40 dark:border-accent-500/30 bg-gradient-to-r from-accent-500/5 to-accent-400/5 dark:from-accent-500/10 dark:to-accent-400/5 hover:border-accent-500/60 dark:hover:border-accent-500/50'
+          : warning
+            ? 'border-red-200 dark:border-red-900/50 bg-red-50 dark:bg-red-950/30'
+            : 'border-surface-200 dark:border-surface-800 bg-white dark:bg-surface-900 hover:border-primary-300 dark:hover:border-primary-700'
       }`}
     >
-      <div className="text-xs font-medium text-surface-500 dark:text-surface-400 mb-1.5 truncate">{label}</div>
+      <div className={`text-xs font-medium mb-1.5 truncate ${hero ? 'text-accent-600 dark:text-accent-400' : 'text-surface-500 dark:text-surface-400'}`}>{label}</div>
       <div className="flex items-baseline gap-1.5">
         <span
-          className={`text-lg font-semibold font-mono tabular-nums tracking-tight ${
-            warning ? 'text-red-600 dark:text-red-400' : 'text-surface-900 dark:text-white'
+          className={`font-semibold font-mono tabular-nums tracking-tight ${
+            hero ? 'text-xl text-accent-600 dark:text-accent-400' : 'text-lg'
+          } ${
+            !hero && (warning ? 'text-red-600 dark:text-red-400' : 'text-surface-900 dark:text-white')
           }`}
         >
           {display}
         </span>
-        <span className="text-xs text-surface-400 dark:text-surface-400 font-mono">{unit}</span>
+        <span className={`text-xs font-mono ${hero ? 'text-accent-500/70 dark:text-accent-400/70' : 'text-surface-400 dark:text-surface-400'}`}>{unit}</span>
       </div>
       {copied && (
         <div className="absolute top-1.5 right-1.5 px-1.5 py-0.5 text-[10px] font-medium bg-primary-600 text-white rounded-md">

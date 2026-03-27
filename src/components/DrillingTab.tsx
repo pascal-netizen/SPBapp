@@ -88,8 +88,8 @@ export function DrillingTab({ history, loadedEntry }: DrillingTabProps) {
         { labelKey: 'drilling.Pc', value: results.Pc, unit: t('units.kW'), decimals: 1 },
         { labelKey: 'drilling.P', value: results.P, unit: t('units.kW'), decimals: 1 },
         { labelKey: 'drilling.Q', value: results.Q, unit: t('units.cm3min') },
-        { labelKey: 'drilling.th', value: results.th, unit: t('units.min') },
         { labelKey: 'common.utilization', value: results.utilization, unit: '%', decimals: 1 },
+        { labelKey: 'drilling.th', value: results.th, unit: t('units.min'), hero: true },
       ],
     },
   ]

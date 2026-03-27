@@ -16,7 +16,7 @@ import type { useHistory, HistoryEntry } from '../hooks/useHistory'
 
 const defaultInputs: MillingInputs = {
   D: 63, z: 4, fz: 0.3, ap: 3, ae: 20, kappa: 90,
-  kc11: 2100, mc: 0.25, vc: 180, Keng: 1.7, Pmachine: 8,
+  kc11: 2100, mc: 0.25, vc: 180, Keng: 1.7, Pmachine: 8, L: 200,
 }
 
 interface MillingTabProps {
@@ -100,6 +100,7 @@ export function MillingTab({ history, loadedEntry }: MillingTabProps) {
         { labelKey: 'milling.P', value: results.P, unit: t('units.kW'), decimals: 1 },
         { labelKey: 'milling.Q', value: results.Q, unit: t('units.cm3min') },
         { labelKey: 'common.utilization', value: results.utilization, unit: '%', decimals: 1 },
+        { labelKey: 'milling.th', value: results.th, unit: t('units.min'), hero: true },
       ],
     },
   ]
@@ -136,6 +137,7 @@ export function MillingTab({ history, loadedEntry }: MillingTabProps) {
       group: t('inputGroups.machine'),
       items: [
         { label: t('common.machinePower'), value: inputs.Pmachine, unit: 'kW' },
+        { label: t('milling.L'), value: inputs.L, unit: 'mm' },
       ],
     }
     return [materialGroup, toolGroup, techGroup, machineGroup, ...resultGroups.map((g) => ({
@@ -184,6 +186,9 @@ export function MillingTab({ history, loadedEntry }: MillingTabProps) {
             <div className="border-t border-surface-100 dark:border-surface-800 my-2" />
             <InputGroupLabel label={t('inputGroups.machine')} />
             <InputField label={t('common.machinePower')} value={inputs.Pmachine} unit="kW" onChange={(v) => update('Pmachine', v)} step={0.5} />
+            <div className="border-t border-surface-100 dark:border-surface-800 my-2" />
+            <InputGroupLabel label={t('inputGroups.path')} />
+            <InputField label={t('milling.L')} value={inputs.L} unit="mm" onChange={(v) => update('L', v)} step={10} min={0} />
           </div>
         </div>
         <ResultsPanel groups={resultGroups} utilization={results.utilization} />

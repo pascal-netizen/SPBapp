@@ -17,7 +17,7 @@ export function calculateKeng(ae: number, D: number): number {
  * Returns all results and 16 annotated calculation steps.
  */
 export function calculateMilling(input: MillingInputs): { results: MillingResults; steps: CalculationStep[] } {
-  const { D, z, fz, ap, kappa, kc11, mc, vc, Pmachine } = input
+  const { D, z, fz, ap, kappa, kc11, mc, vc, Pmachine, L } = input
   // Clamp ae to [0, D] to prevent NaN from Math.acos
   const ae = Math.max(0, Math.min(input.ae, D))
 
@@ -188,6 +188,15 @@ export function calculateMilling(input: MillingInputs): { results: MillingResult
     result: `${Q.toFixed(2)} cm³/min`,
   })
 
+  // Step 17: Bearbeitungszeit th [min]
+  const th = vf > 0 ? L / vf : 0
+  steps.push({
+    name: 'Bearbeitungszeit th',
+    formula: 'th = L / vf [min]',
+    substituted: `th = ${L} / ${vf.toFixed(2)}`,
+    result: `${th.toFixed(2)} min`,
+  })
+
   const results: MillingResults = {
     Deff,
     phiS,
@@ -206,6 +215,7 @@ export function calculateMilling(input: MillingInputs): { results: MillingResult
     P,
     utilization,
     Q,
+    th,
   }
 
   return { results, steps }

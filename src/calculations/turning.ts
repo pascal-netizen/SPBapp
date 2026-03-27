@@ -65,5 +65,9 @@ export function calculateTurning(input: TurningInputs): {
   const utilization = (P / input.Pmachine) * 100
   steps.push({ name: 'Maschinenauslastung', formula: 'Auslastung = P / P_masch × 100', substituted: `Auslastung = ${P.toFixed(2)} / ${input.Pmachine} × 100`, result: `${utilization.toFixed(1)}%` })
 
-  return { results: { n, vf, h, b, A, kc, Fc, Ff, Fp, Pc, P, M: torqueM, Q, utilization }, steps }
+  // 15. th = L / vf
+  const th = vf > 0 ? input.L / vf : 0
+  steps.push({ name: 'Bearbeitungszeit th', formula: 'th = L / vf [min]', substituted: `th = ${input.L} / ${vf.toFixed(2)}`, result: `${th.toFixed(2)} min` })
+
+  return { results: { n, vf, h, b, A, kc, Fc, Ff, Fp, Pc, P, M: torqueM, Q, th, utilization }, steps }
 }

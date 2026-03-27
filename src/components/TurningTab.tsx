@@ -15,7 +15,7 @@ import type { useHistory, HistoryEntry } from '../hooks/useHistory'
 
 const defaultInputs: TurningInputs = {
   d: 50, vc: 150, f: 0.2, ap: 2, kappaR: 90,
-  kc11: 2100, mc: 0.25, eta: 0.8, Pmachine: 8,
+  kc11: 2100, mc: 0.25, eta: 0.8, Pmachine: 8, L: 100,
 }
 
 interface TurningTabProps {
@@ -88,6 +88,7 @@ export function TurningTab({ history, loadedEntry }: TurningTabProps) {
         { labelKey: 'turning.M', value: results.M, unit: t('units.Nm'), decimals: 1 },
         { labelKey: 'turning.Q', value: results.Q, unit: t('units.cm3min') },
         { labelKey: 'common.utilization', value: results.utilization, unit: '%', decimals: 1 },
+        { labelKey: 'turning.th', value: results.th, unit: t('units.min'), hero: true },
       ],
     },
   ]
@@ -122,6 +123,7 @@ export function TurningTab({ history, loadedEntry }: TurningTabProps) {
       items: [
         { label: t('common.machinePower'), value: inputs.Pmachine, unit: 'kW' },
         { label: t('common.efficiency'), value: inputs.eta, unit: '' },
+        { label: t('turning.L'), value: inputs.L, unit: 'mm' },
       ],
     }
     return [materialGroup, toolGroup, techGroup, machineGroup, ...resultGroups.map((g) => ({
@@ -168,6 +170,9 @@ export function TurningTab({ history, loadedEntry }: TurningTabProps) {
             <InputGroupLabel label={t('inputGroups.machine')} />
             <InputField label={t('common.machinePower')} value={inputs.Pmachine} unit="kW" onChange={(v) => update('Pmachine', v)} step={0.5} />
             <InputField label={t('common.efficiency')} value={inputs.eta} unit="" onChange={(v) => update('eta', v)} step={0.05} min={0.1} max={1} />
+            <div className="border-t border-surface-100 dark:border-surface-800 my-2" />
+            <InputGroupLabel label={t('inputGroups.path')} />
+            <InputField label={t('turning.L')} value={inputs.L} unit="mm" onChange={(v) => update('L', v)} step={10} min={0} />
           </div>
         </div>
         <ResultsPanel groups={resultGroups} utilization={results.utilization} />
