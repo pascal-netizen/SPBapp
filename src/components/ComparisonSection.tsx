@@ -165,8 +165,8 @@ export function ComparisonSection({ tab, params, historyEntries, calculateFromIn
                   <th className="text-left py-2 pr-3 text-xs font-semibold uppercase tracking-wider text-surface-500 dark:text-surface-400">{t('comparison.parameter')}</th>
                   <th className="text-right py-2 px-3 text-xs font-semibold uppercase tracking-wider text-surface-500 dark:text-surface-400">{t('comparison.soll')}</th>
                   <th className="text-right py-2 px-3 text-xs font-semibold uppercase tracking-wider text-surface-500 dark:text-surface-400">{t('comparison.ist')}</th>
-                  <th className="text-right py-2 px-3 text-xs font-semibold uppercase tracking-wider text-surface-500 dark:text-surface-400">Δ</th>
-                  <th className="text-right py-2 pl-3 text-xs font-semibold uppercase tracking-wider text-surface-500 dark:text-surface-400">Δ%</th>
+                  <th className="text-right py-2 px-3 text-xs font-semibold uppercase tracking-wider text-surface-500 dark:text-surface-400">{t('comparison.diff')}</th>
+                  <th className="text-right py-2 pl-3 text-xs font-semibold uppercase tracking-wider text-surface-500 dark:text-surface-400">{t('comparison.diffPct')}</th>
                 </tr>
               </thead>
               <tbody>
