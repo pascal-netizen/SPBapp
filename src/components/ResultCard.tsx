@@ -57,24 +57,24 @@ export function ResultCard({ label, value, unit, decimals = 2, warning = false, 
       title={`${display} ${unit}`}
       className={`p-3.5 rounded-xl border cursor-pointer group relative ${
         hero
-          ? 'col-span-1 sm:col-span-2 border-accent-500/40 dark:border-accent-500/30 bg-gradient-to-r from-accent-500/5 to-accent-400/5 dark:from-accent-500/10 dark:to-accent-400/5 hover:border-accent-500/60 dark:hover:border-accent-500/50'
+          ? 'col-span-1 sm:col-span-2 border-primary-300/60 dark:border-primary-500/30 bg-gradient-to-r from-primary-50/80 to-primary-100/40 dark:from-primary-950/40 dark:to-primary-900/20 hover:border-primary-400/60 dark:hover:border-primary-500/50'
           : warning
             ? 'border-red-200 dark:border-red-900/50 bg-red-50 dark:bg-red-950/30'
             : 'border-surface-200 dark:border-surface-800 bg-white dark:bg-surface-900 hover:border-primary-300 dark:hover:border-primary-700'
       }`}
     >
-      <div className={`text-xs font-medium mb-1.5 truncate ${hero ? 'text-accent-600 dark:text-accent-400' : 'text-surface-500 dark:text-surface-400'}`}>{label}</div>
+      <div className={`text-xs font-medium mb-1.5 truncate ${hero ? 'text-primary-600 dark:text-primary-300' : 'text-surface-500 dark:text-surface-400'}`}>{label}</div>
       <div className="flex items-baseline gap-1.5">
         <span
           className={`font-semibold font-mono tabular-nums tracking-tight ${
-            hero ? 'text-xl text-accent-600 dark:text-accent-400' : 'text-lg'
+            hero ? 'text-xl text-primary-700 dark:text-primary-300' : 'text-lg'
           } ${
             !hero && (warning ? 'text-red-600 dark:text-red-400' : 'text-surface-900 dark:text-white')
           }`}
         >
           {display}
         </span>
-        <span className={`text-xs font-mono ${hero ? 'text-accent-500/70 dark:text-accent-400/70' : 'text-surface-400 dark:text-surface-400'}`}>{unit}</span>
+        <span className={`text-xs font-mono ${hero ? 'text-primary-500/70 dark:text-primary-400/70' : 'text-surface-400 dark:text-surface-400'}`}>{unit}</span>
       </div>
       {copied && (
         <div className="absolute top-1.5 right-1.5 px-1.5 py-0.5 text-[10px] font-medium bg-primary-600 text-white rounded-md">
