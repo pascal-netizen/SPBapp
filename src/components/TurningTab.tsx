@@ -4,7 +4,6 @@ import { InputField } from './InputField'
 import { MaterialSelect } from './MaterialSelect'
 import { ResultsPanel } from './ResultsPanel'
 import { CalculationSteps } from './CalculationSteps'
-import { QuickPresets } from './QuickPresets'
 import { ActionBar } from './ActionBar'
 import { calculateTurning } from '../calculations/turning'
 import { materials } from '../data/materials'
@@ -44,10 +43,6 @@ export function TurningTab({ history, loadedEntry }: TurningTabProps) {
   useUrlSync('turning', materialId, inputs)
 
   const update = (key: keyof TurningInputs, value: number) => setInputs((prev) => ({ ...prev, [key]: value }))
-
-  const applyPreset = (values: Record<string, number>) => {
-    setInputs((prev) => ({ ...prev, ...values }))
-  }
 
   const handleMaterial = (id: string, kc11: number | null, mc: number | null) => {
     setMaterialId(id)
@@ -129,12 +124,9 @@ export function TurningTab({ history, loadedEntry }: TurningTabProps) {
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div className="space-y-1">
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="text-xs font-semibold uppercase tracking-wider text-surface-500 dark:text-surface-400">
-              {t('common.inputs')}
-            </h3>
-            <QuickPresets tab="turning" onApply={applyPreset} />
-          </div>
+          <h3 className="text-xs font-semibold uppercase tracking-wider text-surface-500 dark:text-surface-400 mb-3">
+            {t('common.inputs')}
+          </h3>
           <div className="space-y-2.5 bg-white dark:bg-surface-900 border border-surface-200 dark:border-surface-800 rounded-xl p-4">
             <MaterialSelect selectedId={materialId} onSelect={handleMaterial} tab="turning" currentVc={inputs.vc} />
             <div className="border-t border-surface-100 dark:border-surface-800 my-2" />
