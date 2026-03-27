@@ -186,7 +186,7 @@ export function DrillingTab({ history, loadedEntry }: DrillingTabProps) {
       <CalculationSteps steps={steps} />
       <ComparisonSection
         params={[
-          { key: 'n', labelKey: 'drilling.n', unit: t('units.rpm'), decimals: 0, sollValue: results.n },
+          { key: 'n', labelKey: 'drilling.n', unit: t('units.rpm'), decimals: 0, sollValue: results.n, neutralColor: true },
           { key: 'vf', labelKey: 'drilling.vf', unit: t('units.mmmin'), decimals: 0, sollValue: results.vf },
           { key: 'th', labelKey: 'drilling.th', unit: t('units.min'), decimals: 2, sollValue: results.th, timeFormat: true, invertColor: true },
         ]}

@@ -187,7 +187,7 @@ export function TurningTab({ history, loadedEntry }: TurningTabProps) {
       <CalculationSteps steps={steps} />
       <ComparisonSection
         params={[
-          { key: 'n', labelKey: 'turning.n', unit: t('units.rpm'), decimals: 0, sollValue: results.n },
+          { key: 'n', labelKey: 'turning.n', unit: t('units.rpm'), decimals: 0, sollValue: results.n, neutralColor: true },
           { key: 'vf', labelKey: 'turning.vf', unit: t('units.mmmin'), decimals: 0, sollValue: results.vf },
           { key: 'th', labelKey: 'turning.th', unit: t('units.min'), decimals: 2, sollValue: results.th, timeFormat: true, invertColor: true },
         ]}

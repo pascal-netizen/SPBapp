@@ -203,7 +203,7 @@ export function MillingTab({ history, loadedEntry }: MillingTabProps) {
       <CalculationSteps steps={steps} />
       <ComparisonSection
         params={[
-          { key: 'n', labelKey: 'milling.n', unit: t('units.rpm'), decimals: 0, sollValue: results.n },
+          { key: 'n', labelKey: 'milling.n', unit: t('units.rpm'), decimals: 0, sollValue: results.n, neutralColor: true },
           { key: 'vf', labelKey: 'milling.vf', unit: t('units.mmmin'), decimals: 0, sollValue: results.vf },
           { key: 'th', labelKey: 'milling.th', unit: t('units.min'), decimals: 2, sollValue: results.th, timeFormat: true, invertColor: true },
         ]}
