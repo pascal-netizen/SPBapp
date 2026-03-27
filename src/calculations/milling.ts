@@ -25,15 +25,15 @@ export function calculateMilling(input: MillingInputs): { results: MillingResult
 
   // Step 1: Effektiver Fräserdurchmesser Deff [mm]
   const kappaRad = kappa * (Math.PI / 180)
-  const Deff = kappa === 90 ? D : D - (2 * ap) / Math.tan(kappaRad)
+  const Deff = kappa === 90 ? D : D + (2 * ap) / Math.tan(kappaRad)
   steps.push({
     name: 'Effektiver Fräserdurchmesser Deff',
     formula: kappa === 90
       ? 'Deff = D (κ = 90°, keine Korrektur)'
-      : 'Deff = D − (2 × ap) / tan(κ) [mm]',
+      : 'Deff = D + (2 × ap) / tan(κ) [mm]',
     substituted: kappa === 90
       ? `Deff = ${D}`
-      : `Deff = ${D} − (2 × ${ap}) / tan(${kappa}°)`,
+      : `Deff = ${D} + (2 × ${ap}) / tan(${kappa}°)`,
     result: `${Deff.toFixed(2)} mm`,
   })
 
@@ -56,12 +56,12 @@ export function calculateMilling(input: MillingInputs): { results: MillingResult
     result: `${ze.toFixed(3)}`,
   })
 
-  // Step 3: Drehzahl n [U/min] — basierend auf D (Schnittgeschwindigkeit am Außendurchmesser)
-  const n = (vc * 1000) / (Math.PI * D)
+  // Step 3: Drehzahl n [U/min] — basierend auf Deff
+  const n = (vc * 1000) / (Math.PI * Deff)
   steps.push({
     name: 'Drehzahl n',
-    formula: 'n = (vc × 1000) / (π × D) [U/min]',
-    substituted: `n = (${vc} × 1000) / (π × ${D})`,
+    formula: 'n = (vc × 1000) / (π × Deff) [U/min]',
+    substituted: `n = (${vc} × 1000) / (π × ${Deff.toFixed(2)})`,
     result: `${n.toFixed(2)} U/min`,
   })
 
