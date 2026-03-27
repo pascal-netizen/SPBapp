@@ -26,11 +26,14 @@ export function ResultsPanel({ groups, utilization }: ResultsPanelProps) {
             {t('common.warning')}
           </div>
         )}
-        <p className="text-[11px] text-surface-400 dark:text-surface-500 -mt-1">{t('common.clickToCopy')}</p>
+        <p className="text-[11px] text-surface-400 dark:text-surface-500 -mt-1 text-right">{t('common.clickToCopy')}</p>
         {groups.map((group) => (
           <div key={group.groupKey}>
-            <div className="text-xs font-medium text-primary-600/70 dark:text-primary-400/70 mb-1.5 px-1">
-              {t(group.groupKey)}
+            <div className="flex items-center gap-2 mb-1.5 px-1">
+              <div className="w-0.5 h-3.5 rounded-full bg-primary-500/60 dark:bg-primary-400/60" />
+              <span className="text-xs font-semibold uppercase tracking-wider text-primary-600/70 dark:text-primary-400/70">
+                {t(group.groupKey)}
+              </span>
             </div>
             <div className="grid grid-cols-2 gap-2">
               {group.items.map((r) => (
