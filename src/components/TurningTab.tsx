@@ -5,6 +5,7 @@ import { MaterialSelect } from './MaterialSelect'
 import { ResultsPanel } from './ResultsPanel'
 import { CalculationSteps } from './CalculationSteps'
 import { ActionBar } from './ActionBar'
+import { InputGroupLabel } from './InputGroupLabel'
 import { calculateTurning } from '../calculations/turning'
 import { materials } from '../data/materials'
 import { useUrlSync, decodeState } from '../hooks/useUrlState'
@@ -90,22 +91,37 @@ export function TurningTab({ history, loadedEntry }: TurningTabProps) {
 
   const exportData = () => {
     const mat = materials.find((m) => m.id === materialId)
-    const inputGroup = {
-      group: t('common.inputs'),
+    const materialGroup = {
+      group: t('inputGroups.material'),
       items: [
         { label: t('common.material'), value: 0, unit: mat?.name ?? '', isText: true },
+        { label: t('turning.kc11'), value: inputs.kc11, unit: 'N/mm²' },
+        { label: t('turning.mc'), value: inputs.mc, unit: '' },
+      ],
+    }
+    const toolGroup = {
+      group: t('inputGroups.toolGeometry'),
+      items: [
         { label: t('turning.d'), value: inputs.d, unit: 'mm' },
+        { label: t('turning.kappaR'), value: inputs.kappaR, unit: '°' },
+      ],
+    }
+    const techGroup = {
+      group: t('inputGroups.technology'),
+      items: [
         { label: t('turning.vc'), value: inputs.vc, unit: 'm/min' },
         { label: t('turning.f'), value: inputs.f, unit: 'mm/U' },
         { label: t('turning.ap'), value: inputs.ap, unit: 'mm' },
-        { label: t('turning.kappaR'), value: inputs.kappaR, unit: '°' },
-        { label: t('turning.kc11'), value: inputs.kc11, unit: 'N/mm²' },
-        { label: t('turning.mc'), value: inputs.mc, unit: '' },
-        { label: t('common.efficiency'), value: inputs.eta, unit: '' },
-        { label: t('common.machinePower'), value: inputs.Pmachine, unit: 'kW' },
       ],
     }
-    return [inputGroup, ...resultGroups.map((g) => ({
+    const machineGroup = {
+      group: t('inputGroups.machine'),
+      items: [
+        { label: t('common.machinePower'), value: inputs.Pmachine, unit: 'kW' },
+        { label: t('common.efficiency'), value: inputs.eta, unit: '' },
+      ],
+    }
+    return [materialGroup, toolGroup, techGroup, machineGroup, ...resultGroups.map((g) => ({
       group: t(g.groupKey),
       items: g.items.map((i) => ({ label: t(i.labelKey), value: i.value, unit: i.unit, decimals: i.decimals })),
     }))]
@@ -124,23 +140,31 @@ export function TurningTab({ history, loadedEntry }: TurningTabProps) {
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div className="space-y-1">
-          <h3 className="text-xs font-semibold uppercase tracking-wider text-surface-500 dark:text-surface-400 mb-3">
+          <h3 className="text-xs font-semibold uppercase tracking-wider text-surface-500 dark:text-surface-400 mb-3 flex items-center gap-1.5">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="w-3.5 h-3.5">
+              <path d="M13.488 2.513a1.75 1.75 0 00-2.475 0L6.75 6.774a2.75 2.75 0 00-.596.892l-.848 2.047a.75.75 0 00.98.98l2.047-.848a2.75 2.75 0 00.892-.596l4.261-4.262a1.75 1.75 0 000-2.474z" />
+              <path d="M4.75 3.5c-.69 0-1.25.56-1.25 1.25v6.5c0 .69.56 1.25 1.25 1.25h6.5c.69 0 1.25-.56 1.25-1.25V9A.75.75 0 0114 9v2.25A2.75 2.75 0 0111.25 14h-6.5A2.75 2.75 0 012 11.25v-6.5A2.75 2.75 0 014.75 2H7a.75.75 0 010 1.5H4.75z" />
+            </svg>
             {t('common.inputs')}
           </h3>
           <div className="space-y-2.5 bg-white dark:bg-surface-900 border border-surface-200 dark:border-surface-800 rounded-xl p-4">
+            <InputGroupLabel label={t('inputGroups.material')} />
             <MaterialSelect selectedId={materialId} onSelect={handleMaterial} tab="turning" currentVc={inputs.vc} />
+            <InputField label={t('turning.kc11')} value={inputs.kc11} unit="N/mm²" onChange={(v) => update('kc11', v)} step={10} />
+            <InputField label={t('turning.mc')} value={inputs.mc} unit="" onChange={(v) => update('mc', v)} step={0.01} />
             <div className="border-t border-surface-100 dark:border-surface-800 my-2" />
+            <InputGroupLabel label={t('inputGroups.toolGeometry')} />
             <InputField label={t('turning.d')} value={inputs.d} unit="mm" onChange={(v) => update('d', v)} step={1} />
+            <InputField label={t('turning.kappaR')} value={inputs.kappaR} unit="°" onChange={(v) => update('kappaR', v)} step={1} />
+            <div className="border-t border-surface-100 dark:border-surface-800 my-2" />
+            <InputGroupLabel label={t('inputGroups.technology')} />
             <InputField label={t('turning.vc')} value={inputs.vc} unit="m/min" onChange={(v) => update('vc', v)} step={5} />
             <InputField label={t('turning.f')} value={inputs.f} unit="mm/U" onChange={(v) => update('f', v)} step={0.01} />
             <InputField label={t('turning.ap')} value={inputs.ap} unit="mm" onChange={(v) => update('ap', v)} step={0.5} />
-            <InputField label={t('turning.kappaR')} value={inputs.kappaR} unit="°" onChange={(v) => update('kappaR', v)} step={1} />
             <div className="border-t border-surface-100 dark:border-surface-800 my-2" />
-            <InputField label={t('turning.kc11')} value={inputs.kc11} unit="N/mm²" onChange={(v) => update('kc11', v)} step={10} />
-            <InputField label={t('turning.mc')} value={inputs.mc} unit="" onChange={(v) => update('mc', v)} step={0.01} />
-            <InputField label={t('common.efficiency')} value={inputs.eta} unit="" onChange={(v) => update('eta', v)} step={0.05} min={0.1} max={1} />
-            <div className="border-t border-surface-100 dark:border-surface-800 my-2" />
+            <InputGroupLabel label={t('inputGroups.machine')} />
             <InputField label={t('common.machinePower')} value={inputs.Pmachine} unit="kW" onChange={(v) => update('Pmachine', v)} step={0.5} />
+            <InputField label={t('common.efficiency')} value={inputs.eta} unit="" onChange={(v) => update('eta', v)} step={0.05} min={0.1} max={1} />
           </div>
         </div>
         <ResultsPanel groups={resultGroups} utilization={results.utilization} />

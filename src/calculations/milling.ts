@@ -123,20 +123,20 @@ export function calculateMilling(input: MillingInputs): { results: MillingResult
   })
 
   // Step 10: Vorschubkraft horizontal Ff [N]
-  const Ff = Fc * Math.cos(kappaRad)
+  const Ff = Fc * Math.sin(kappaRad)
   steps.push({
     name: 'Vorschubkraft horizontal Ff',
-    formula: 'Ff = Fc × cos(κ) [N]',
-    substituted: `Ff = ${Fc.toFixed(2)} × cos(${kappa}°)`,
+    formula: 'Ff = Fc × sin(κ) [N]',
+    substituted: `Ff = ${Fc.toFixed(2)} × sin(${kappa}°)`,
     result: `${Ff.toFixed(2)} N`,
   })
 
   // Step 11: Vorschubkraft axial Fa [N]
-  const Fa = Fc * Math.sin(kappaRad) * 0.4
+  const Fa = Fc * Math.cos(kappaRad) * 0.4
   steps.push({
     name: 'Vorschubkraft axial Fa',
-    formula: 'Fa = Fc × sin(κ) × 0.4 [N]',
-    substituted: `Fa = ${Fc.toFixed(2)} × sin(${kappa}°) × 0.4`,
+    formula: 'Fa = Fc × cos(κ) × 0.4 [N]',
+    substituted: `Fa = ${Fc.toFixed(2)} × cos(${kappa}°) × 0.4`,
     result: `${Fa.toFixed(2)} N`,
   })
 
