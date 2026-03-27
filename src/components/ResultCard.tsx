@@ -8,11 +8,19 @@ interface ResultCardProps {
   warning?: boolean
 }
 
+function fmt(value: number, decimals: number): string {
+  return value.toLocaleString('de-DE', {
+    minimumFractionDigits: decimals,
+    maximumFractionDigits: decimals,
+  })
+}
+
 export function ResultCard({ label, value, unit, decimals = 2, warning = false }: ResultCardProps) {
   const [copied, setCopied] = useState(false)
+  const display = fmt(value, decimals)
 
   const copy = () => {
-    navigator.clipboard.writeText(value.toFixed(decimals))
+    navigator.clipboard.writeText(display)
     setCopied(true)
     setTimeout(() => setCopied(false), 1200)
   }
@@ -20,7 +28,7 @@ export function ResultCard({ label, value, unit, decimals = 2, warning = false }
   return (
     <div
       onClick={copy}
-      title={`${value.toFixed(decimals)} ${unit}`}
+      title={`${display} ${unit}`}
       className={`p-3.5 rounded-xl border cursor-pointer group relative ${
         warning
           ? 'border-red-200 dark:border-red-900/50 bg-red-50 dark:bg-red-950/30'
@@ -34,7 +42,7 @@ export function ResultCard({ label, value, unit, decimals = 2, warning = false }
             warning ? 'text-red-600 dark:text-red-400' : 'text-surface-900 dark:text-white'
           }`}
         >
-          {value.toFixed(decimals)}
+          {display}
         </span>
         <span className="text-xs text-surface-400 dark:text-surface-500 font-mono">{unit}</span>
       </div>

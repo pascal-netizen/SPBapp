@@ -65,17 +65,17 @@ export function MillingTab({ history, loadedEntry }: MillingTabProps) {
       groupKey: 'groups.geometry',
       items: [
         { labelKey: 'milling.phiS', value: results.phiS, unit: '°' },
-        { labelKey: 'milling.ze', value: results.ze, unit: '', decimals: 3 },
-        { labelKey: 'milling.hm', value: results.hm, unit: t('units.mm'), decimals: 4 },
-        { labelKey: 'milling.hmax', value: results.hmax, unit: t('units.mm'), decimals: 4 },
+        { labelKey: 'milling.ze', value: results.ze, unit: '' },
+        { labelKey: 'milling.hm', value: results.hm, unit: t('units.mm') },
+        { labelKey: 'milling.hmax', value: results.hmax, unit: t('units.mm') },
         { labelKey: 'milling.b', value: results.b, unit: t('units.mm') },
       ],
     },
     {
       groupKey: 'groups.kinematics',
       items: [
-        { labelKey: 'milling.n', value: results.n, unit: t('units.rpm') },
-        { labelKey: 'milling.vf', value: results.vf, unit: t('units.mmmin') },
+        { labelKey: 'milling.n', value: results.n, unit: t('units.rpm'), decimals: 0 },
+        { labelKey: 'milling.vf', value: results.vf, unit: t('units.mmmin'), decimals: 0 },
       ],
     },
     {
@@ -94,7 +94,7 @@ export function MillingTab({ history, loadedEntry }: MillingTabProps) {
         { labelKey: 'milling.M', value: results.M, unit: t('units.Nm') },
         { labelKey: 'milling.P', value: results.P, unit: t('units.kW') },
         { labelKey: 'milling.Q', value: results.Q, unit: t('units.cm3min') },
-        { labelKey: 'common.utilization', value: results.utilization, unit: t('units.percent'), decimals: 1 },
+        { labelKey: 'common.utilization', value: results.utilization, unit: '%', decimals: 1 },
       ],
     },
   ]

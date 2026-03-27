@@ -55,18 +55,18 @@ export function DrillingTab({ history, loadedEntry }: DrillingTabProps) {
     {
       groupKey: 'groups.geometry',
       items: [
-        { labelKey: 'drilling.kappa', value: results.kappa, unit: '°', decimals: 1 },
-        { labelKey: 'drilling.fz', value: results.fz, unit: t('units.mm'), decimals: 4 },
-        { labelKey: 'drilling.h', value: results.h, unit: t('units.mm'), decimals: 4 },
+        { labelKey: 'drilling.kappa', value: results.kappa, unit: '°' },
+        { labelKey: 'drilling.fz', value: results.fz, unit: t('units.mm') },
+        { labelKey: 'drilling.h', value: results.h, unit: t('units.mm') },
         { labelKey: 'drilling.b', value: results.b, unit: t('units.mm') },
-        { labelKey: 'drilling.A', value: results.A, unit: 'mm²', decimals: 4 },
+        { labelKey: 'drilling.A', value: results.A, unit: 'mm²' },
       ],
     },
     {
       groupKey: 'groups.kinematics',
       items: [
-        { labelKey: 'drilling.n', value: results.n, unit: t('units.rpm') },
-        { labelKey: 'drilling.vf', value: results.vf, unit: t('units.mmmin') },
+        { labelKey: 'drilling.n', value: results.n, unit: t('units.rpm'), decimals: 0 },
+        { labelKey: 'drilling.vf', value: results.vf, unit: t('units.mmmin'), decimals: 0 },
       ],
     },
     {
@@ -84,8 +84,8 @@ export function DrillingTab({ history, loadedEntry }: DrillingTabProps) {
         { labelKey: 'drilling.Pc', value: results.Pc, unit: t('units.kW') },
         { labelKey: 'drilling.P', value: results.P, unit: t('units.kW') },
         { labelKey: 'drilling.Q', value: results.Q, unit: t('units.cm3min') },
-        { labelKey: 'drilling.th', value: results.th, unit: t('units.min'), decimals: 3 },
-        { labelKey: 'common.utilization', value: results.utilization, unit: t('units.percent'), decimals: 1 },
+        { labelKey: 'drilling.th', value: results.th, unit: t('units.min') },
+        { labelKey: 'common.utilization', value: results.utilization, unit: '%', decimals: 1 },
       ],
     },
   ]

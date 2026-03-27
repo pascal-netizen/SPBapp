@@ -55,16 +55,16 @@ export function TurningTab({ history, loadedEntry }: TurningTabProps) {
     {
       groupKey: 'groups.geometry',
       items: [
-        { labelKey: 'turning.h', value: results.h, unit: t('units.mm'), decimals: 4 },
+        { labelKey: 'turning.h', value: results.h, unit: t('units.mm') },
         { labelKey: 'turning.b', value: results.b, unit: t('units.mm') },
-        { labelKey: 'turning.A', value: results.A, unit: 'mm²', decimals: 4 },
+        { labelKey: 'turning.A', value: results.A, unit: 'mm²' },
       ],
     },
     {
       groupKey: 'groups.kinematics',
       items: [
-        { labelKey: 'turning.n', value: results.n, unit: t('units.rpm') },
-        { labelKey: 'turning.vf', value: results.vf, unit: t('units.mmmin') },
+        { labelKey: 'turning.n', value: results.n, unit: t('units.rpm'), decimals: 0 },
+        { labelKey: 'turning.vf', value: results.vf, unit: t('units.mmmin'), decimals: 0 },
       ],
     },
     {
@@ -83,7 +83,7 @@ export function TurningTab({ history, loadedEntry }: TurningTabProps) {
         { labelKey: 'turning.P', value: results.P, unit: t('units.kW') },
         { labelKey: 'turning.M', value: results.M, unit: t('units.Nm') },
         { labelKey: 'turning.Q', value: results.Q, unit: t('units.cm3min') },
-        { labelKey: 'common.utilization', value: results.utilization, unit: t('units.percent'), decimals: 1 },
+        { labelKey: 'common.utilization', value: results.utilization, unit: '%', decimals: 1 },
       ],
     },
   ]
