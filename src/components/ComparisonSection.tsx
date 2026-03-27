@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
 interface ComparisonParam {
@@ -69,7 +69,18 @@ function renderValue(value: number, decimals: number, unit: string, timeFormat?:
 
 export function ComparisonSection({ params, savedIst, savedSoll }: ComparisonSectionProps) {
   const { t } = useTranslation()
+  const sectionRef = useRef<HTMLDivElement>(null)
   const [isOpen, setIsOpen] = useState(false)
+
+  const handleToggle = () => {
+    const opening = !isOpen
+    setIsOpen(opening)
+    if (opening) {
+      setTimeout(() => {
+        sectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }, 50)
+    }
+  }
   const [manualMode, setManualMode] = useState(false)
   const [manualIst, setManualIst] = useState<Record<string, string>>({})
   const [manualTimeIst, setManualTimeIst] = useState<Record<string, { min: string; sec: string }>>({})
@@ -102,9 +113,9 @@ export function ComparisonSection({ params, savedIst, savedSoll }: ComparisonSec
   }
 
   return (
-    <div className="mt-4 border border-surface-200 dark:border-surface-800 rounded-xl overflow-hidden">
+    <div ref={sectionRef} className="mt-4 border border-surface-200 dark:border-surface-800 rounded-xl overflow-hidden">
       <button
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={handleToggle}
         className="w-full flex items-center justify-between px-5 py-3.5 text-sm font-medium text-surface-700 dark:text-surface-300 hover:bg-surface-50 dark:hover:bg-surface-800/50 cursor-pointer transition-colors"
       >
         <span className="flex items-center gap-2">
