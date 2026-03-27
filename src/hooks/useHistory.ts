@@ -13,9 +13,24 @@ export interface HistoryEntry {
 const STORAGE_KEY = 'spbapp-history'
 const MAX_ENTRIES = 20
 
+function isValidEntry(e: unknown): e is HistoryEntry {
+  if (typeof e !== 'object' || e === null) return false
+  const obj = e as Record<string, unknown>
+  return (
+    typeof obj.id === 'string' &&
+    typeof obj.tab === 'string' &&
+    ['milling', 'turning', 'drilling'].includes(obj.tab as string) &&
+    typeof obj.materialId === 'string' &&
+    typeof obj.inputs === 'object' && obj.inputs !== null &&
+    typeof obj.timestamp === 'number'
+  )
+}
+
 function loadHistory(): HistoryEntry[] {
   try {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]')
+    const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]')
+    if (!Array.isArray(parsed)) return []
+    return parsed.filter(isValidEntry)
   } catch {
     return []
   }

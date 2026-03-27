@@ -35,7 +35,7 @@ export function KengInfo() {
         </svg>
       </button>
       {isOpen && (
-        <div className="absolute z-20 mt-2 right-0 w-72 bg-white dark:bg-surface-800 border border-surface-200 dark:border-surface-700 rounded-xl shadow-xl shadow-surface-900/10 dark:shadow-surface-950/50 p-4">
+        <div className="absolute z-20 mt-2 right-0 w-72 max-w-[calc(100vw-2rem)] bg-white dark:bg-surface-800 border border-surface-200 dark:border-surface-700 rounded-xl shadow-xl shadow-surface-900/10 dark:shadow-surface-950/50 p-4">
           <div className="text-xs font-semibold uppercase tracking-wider text-surface-500 dark:text-surface-400 mb-3">
             {t('kengTable.title')}
           </div>

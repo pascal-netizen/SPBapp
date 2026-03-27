@@ -101,11 +101,16 @@ export async function exportXLSX(title: string, groups: ExportGroup[]) {
   XLSX.writeFile(wb, `${sanitizeFilename(title)}.xlsx`)
 }
 
-export function shareUrl() {
+export async function shareUrl(): Promise<boolean> {
   const url = window.location.href
-  if (navigator.share) {
-    navigator.share({ title: 'SPBapp', url })
-  } else {
-    navigator.clipboard.writeText(url)
+  try {
+    if (navigator.share) {
+      await navigator.share({ title: 'SPBapp', url })
+    } else {
+      await navigator.clipboard.writeText(url)
+    }
+    return true
+  } catch {
+    return false
   }
 }

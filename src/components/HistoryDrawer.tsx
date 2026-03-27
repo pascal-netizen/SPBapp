@@ -35,7 +35,7 @@ export function HistoryDrawer({ isOpen, onClose, entries, onLoad, onRemove, onCl
 
       {/* Drawer */}
       <div
-        className={`fixed top-0 right-0 h-full w-80 sm:w-96 bg-white dark:bg-surface-900 border-l border-surface-200 dark:border-surface-800 shadow-2xl z-50 flex flex-col transition-transform duration-300 ease-out ${
+        className={`fixed top-0 right-0 h-full w-[min(20rem,100vw)] sm:w-96 bg-white dark:bg-surface-900 border-l border-surface-200 dark:border-surface-800 shadow-2xl z-50 flex flex-col transition-transform duration-300 ease-out ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
@@ -65,7 +65,7 @@ export function HistoryDrawer({ isOpen, onClose, entries, onLoad, onRemove, onCl
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-8 h-8 mx-auto text-surface-300 dark:text-surface-600 mb-3">
                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-13a.75.75 0 00-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 000-1.5h-3.25V5z" clipRule="evenodd" />
               </svg>
-              <p className="text-sm text-surface-400 dark:text-surface-500">{t('history.empty')}</p>
+              <p className="text-sm text-surface-400 dark:text-surface-400">{t('history.empty')}</p>
             </div>
           ) : (
             entries.map((entry) => (
@@ -80,13 +80,13 @@ export function HistoryDrawer({ isOpen, onClose, entries, onLoad, onRemove, onCl
                   <div className="text-sm font-medium text-surface-700 dark:text-surface-300">
                     {t(tabLabels[entry.tab])}
                   </div>
-                  <div className="text-[11px] text-surface-400 dark:text-surface-500 mt-0.5">
+                  <div className="text-[11px] text-surface-400 dark:text-surface-400 mt-0.5">
                     {new Date(entry.timestamp).toLocaleString()}
                   </div>
                 </button>
                 <button
                   onClick={() => onRemove(entry.id)}
-                  className="p-1.5 opacity-0 group-hover:opacity-100 rounded-md text-surface-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 cursor-pointer transition-all"
+                  className="p-1.5 sm:opacity-0 sm:group-hover:opacity-100 rounded-md text-surface-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 cursor-pointer transition-all"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="w-3.5 h-3.5">
                     <path fillRule="evenodd" d="M5 3.25V4H2.75a.75.75 0 000 1.5h.3l.815 8.15A1.5 1.5 0 005.357 15h5.285a1.5 1.5 0 001.493-1.35l.815-8.15h.3a.75.75 0 000-1.5H11v-.75A2.25 2.25 0 008.75 1h-1.5A2.25 2.25 0 005 3.25zm2.25-.75a.75.75 0 00-.75.75V4h3v-.75a.75.75 0 00-.75-.75h-1.5zM6.05 6a.75.75 0 01.787.713l.275 5.5a.75.75 0 01-1.498.075l-.275-5.5A.75.75 0 016.05 6zm3.9 0a.75.75 0 01.712.787l-.275 5.5a.75.75 0 01-1.498-.075l.275-5.5a.75.75 0 01.786-.711z" clipRule="evenodd" />

@@ -40,7 +40,7 @@ export function TabNavigation({ activeTab, onTabChange }: TabNavigationProps) {
   ]
 
   return (
-    <nav className="flex bg-white dark:bg-surface-900 border-b border-surface-200 dark:border-surface-800 px-4 sm:px-6">
+    <nav className="flex overflow-x-auto bg-white dark:bg-surface-900 border-b border-surface-200 dark:border-surface-800 px-4 sm:px-6">
       {tabs.map((tab) => {
         const Icon = tabIcons[tab.id]
         const isActive = activeTab === tab.id

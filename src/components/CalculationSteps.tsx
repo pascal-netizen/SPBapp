@@ -32,16 +32,16 @@ export function CalculationSteps({ steps }: CalculationStepsProps) {
         <div className="px-5 pb-5 space-y-2 border-t border-surface-100 dark:border-surface-800">
           <div className="pt-3" />
           {steps.map((step, i) => (
-            <div key={i} className="p-3.5 bg-surface-50 dark:bg-surface-800/50 rounded-lg">
+            <div key={step.name} className="p-3.5 bg-surface-50 dark:bg-surface-800/50 rounded-lg">
               <div className="flex items-center gap-2 mb-2">
                 <span className="inline-flex items-center justify-center w-5 h-5 rounded-md bg-primary-100 dark:bg-primary-900/40 text-primary-700 dark:text-primary-300 text-xs font-semibold">
                   {i + 1}
                 </span>
                 <span className="text-sm font-medium text-surface-800 dark:text-surface-200">{step.name}</span>
               </div>
-              <div className="ml-7 space-y-0.5">
-                <div className="text-xs text-surface-500 dark:text-surface-400 font-mono">{t('common.formula')}: {step.formula}</div>
-                <div className="text-xs text-surface-500 dark:text-surface-500 font-mono">{t('common.values')}: {step.substituted}</div>
+              <div className="ml-7 space-y-0.5 overflow-x-auto">
+                <div className="text-xs text-surface-500 dark:text-surface-400 font-mono break-all">{t('common.formula')}: {step.formula}</div>
+                <div className="text-xs text-surface-500 dark:text-surface-400 font-mono break-all">{t('common.values')}: {step.substituted}</div>
                 <div className="text-xs text-primary-600 dark:text-primary-400 font-mono font-semibold">= {step.result}</div>
               </div>
             </div>

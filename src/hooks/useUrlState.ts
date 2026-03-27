@@ -15,7 +15,9 @@ export function decodeState(hash: string): { tab?: Tab; materialId?: string; inp
   if (!hash || hash.length < 2) return null
   try {
     const params = new URLSearchParams(hash.slice(1))
-    const tab = params.get('tab') as Tab | null
+    const VALID_TABS: Tab[] = ['milling', 'turning', 'drilling']
+    const rawTab = params.get('tab')
+    const tab = VALID_TABS.includes(rawTab as Tab) ? (rawTab as Tab) : null
     const materialId = params.get('mat')
     const inputs: Record<string, number> = {}
     params.forEach((v, k) => {

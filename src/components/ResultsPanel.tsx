@@ -18,7 +18,7 @@ export function ResultsPanel({ groups, utilization }: ResultsPanelProps) {
           </svg>
           {t('common.results')}
         </h3>
-        <span className="text-[11px] text-surface-400 dark:text-surface-500">{t('common.clickToCopy')}</span>
+        <span className="text-[11px] text-surface-400 dark:text-surface-400">{t('common.clickToCopy')}</span>
       </div>
       <div className="bg-primary-50/50 dark:bg-primary-950/20 border border-primary-200/60 dark:border-primary-900/40 rounded-xl p-4 space-y-4">
         {utilization > 100 && (
@@ -32,12 +32,12 @@ export function ResultsPanel({ groups, utilization }: ResultsPanelProps) {
         {groups.map((group) => (
           <div key={group.groupKey}>
             <div className="flex items-center gap-2 mb-1.5 px-1">
-              <div className="w-0.5 h-3.5 rounded-full bg-primary-500/60 dark:bg-primary-400/60" />
-              <span className="text-xs font-semibold uppercase tracking-wider text-primary-600/70 dark:text-primary-400/70">
+              <div className="w-0.5 h-3.5 rounded-full bg-primary-500/60 dark:bg-primary-400" />
+              <span className="text-xs font-semibold uppercase tracking-wider text-primary-600/70 dark:text-primary-300">
                 {t(group.groupKey)}
               </span>
             </div>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {group.items.map((r) => (
                 <ResultCard
                   key={r.labelKey}

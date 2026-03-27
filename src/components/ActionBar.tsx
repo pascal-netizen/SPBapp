@@ -5,7 +5,7 @@ interface ActionBarProps {
   onSave: () => void
   onExportPDF: () => void
   onExportXLSX: () => void
-  onShare: () => void
+  onShare: () => Promise<boolean>
 }
 
 export function ActionBar({ onSave, onExportPDF, onExportXLSX, onShare }: ActionBarProps) {
@@ -19,19 +19,21 @@ export function ActionBar({ onSave, onExportPDF, onExportXLSX, onShare }: Action
     setTimeout(() => setSaved(false), 1500)
   }
 
-  const handleShare = () => {
-    onShare()
-    setShared(true)
-    setTimeout(() => setShared(false), 1500)
+  const handleShare = async () => {
+    const ok = await onShare()
+    if (ok) {
+      setShared(true)
+      setTimeout(() => setShared(false), 1500)
+    }
   }
 
-  const btnClass = 'inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border border-surface-200 dark:border-surface-700 bg-white dark:bg-surface-800 text-surface-600 dark:text-surface-400 hover:border-primary-300 dark:hover:border-primary-600 hover:text-primary-600 dark:hover:text-primary-400 cursor-pointer transition-colors'
+  const btnClass = 'inline-flex items-center gap-1.5 px-3 py-2 text-xs font-medium rounded-lg border border-surface-200 dark:border-surface-700 bg-white dark:bg-surface-800 text-surface-600 dark:text-surface-400 hover:border-primary-300 dark:hover:border-primary-600 hover:text-primary-600 dark:hover:text-primary-400 cursor-pointer transition-colors'
 
   return (
     <div className="flex items-center gap-2 flex-wrap">
       <button
         onClick={handleSave}
-        className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border cursor-pointer transition-colors ${
+        className={`inline-flex items-center gap-1.5 px-3 py-2 text-xs font-medium rounded-lg border cursor-pointer transition-colors ${
           saved
             ? 'border-green-300 dark:border-green-700 bg-green-50 dark:bg-green-900/30 text-green-600 dark:text-green-400'
             : 'border-surface-200 dark:border-surface-700 bg-white dark:bg-surface-800 text-surface-600 dark:text-surface-400 hover:border-primary-300 dark:hover:border-primary-600 hover:text-primary-600 dark:hover:text-primary-400'
@@ -62,7 +64,7 @@ export function ActionBar({ onSave, onExportPDF, onExportXLSX, onShare }: Action
       </button>
       <button
         onClick={handleShare}
-        className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border cursor-pointer transition-colors ${
+        className={`inline-flex items-center gap-1.5 px-3 py-2 text-xs font-medium rounded-lg border cursor-pointer transition-colors ${
           shared
             ? 'border-green-300 dark:border-green-700 bg-green-50 dark:bg-green-900/30 text-green-600 dark:text-green-400'
             : 'border-surface-200 dark:border-surface-700 bg-white dark:bg-surface-800 text-surface-600 dark:text-surface-400 hover:border-primary-300 dark:hover:border-primary-600 hover:text-primary-600 dark:hover:text-primary-400'

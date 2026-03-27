@@ -26,7 +26,10 @@ interface MillingTabProps {
 
 export function MillingTab({ history, loadedEntry }: MillingTabProps) {
   const { t } = useTranslation()
-  const [materialId, setMaterialId] = useState('42crmo4')
+  const [materialId, setMaterialId] = useState(() => {
+    const decoded = decodeState(window.location.hash)
+    return decoded?.tab === 'milling' && decoded.materialId ? decoded.materialId : '42crmo4'
+  })
   const [inputs, setInputs] = useState<MillingInputs>(() => {
     const decoded = decodeState(window.location.hash)
     if (decoded?.tab === 'milling' && decoded.inputs) {

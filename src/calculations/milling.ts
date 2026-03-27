@@ -6,8 +6,9 @@ import type { MillingInputs, MillingResults, CalculationStep } from './types'
  * where φs is the engagement angle derived from ae/D.
  */
 export function calculateKeng(ae: number, D: number): number {
-  const ratio = ae / D
-  const phiSRad = Math.acos(1 - 2 * ratio)
+  if (D <= 0) return 1
+  const ratio = Math.min(ae / D, 1)
+  const phiSRad = Math.acos(Math.max(-1, 1 - 2 * ratio))
   return 2 * Math.sin(phiSRad / 2)
 }
 
@@ -16,21 +17,23 @@ export function calculateKeng(ae: number, D: number): number {
  * Returns all results and 16 annotated calculation steps.
  */
 export function calculateMilling(input: MillingInputs): { results: MillingResults; steps: CalculationStep[] } {
-  const { D, z, fz, ap, ae, kappa, kc11, mc, vc, Pmachine } = input
+  const { D, z, fz, ap, kappa, kc11, mc, vc, Pmachine } = input
+  // Clamp ae to [0, D] to prevent NaN from Math.acos
+  const ae = Math.max(0, Math.min(input.ae, D))
 
   const steps: CalculationStep[] = []
 
   // Step 1: Effektiver Fräserdurchmesser Deff [mm]
   const kappaRad = kappa * (Math.PI / 180)
-  const Deff = kappa === 90 ? D : D + (2 * ap) / Math.tan(kappaRad)
+  const Deff = kappa === 90 ? D : D - (2 * ap) / Math.tan(kappaRad)
   steps.push({
     name: 'Effektiver Fräserdurchmesser Deff',
     formula: kappa === 90
       ? 'Deff = D (κ = 90°, keine Korrektur)'
-      : 'Deff = D + (2 × ap) / tan(κ) [mm]',
+      : 'Deff = D − (2 × ap) / tan(κ) [mm]',
     substituted: kappa === 90
       ? `Deff = ${D}`
-      : `Deff = ${D} + (2 × ${ap}) / tan(${kappa}°)`,
+      : `Deff = ${D} − (2 × ${ap}) / tan(${kappa}°)`,
     result: `${Deff.toFixed(2)} mm`,
   })
 

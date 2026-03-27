@@ -25,7 +25,10 @@ interface TurningTabProps {
 
 export function TurningTab({ history, loadedEntry }: TurningTabProps) {
   const { t } = useTranslation()
-  const [materialId, setMaterialId] = useState('42crmo4')
+  const [materialId, setMaterialId] = useState(() => {
+    const decoded = decodeState(window.location.hash)
+    return decoded?.tab === 'turning' && decoded.materialId ? decoded.materialId : '42crmo4'
+  })
   const [inputs, setInputs] = useState<TurningInputs>(() => {
     const decoded = decodeState(window.location.hash)
     if (decoded?.tab === 'turning' && decoded.inputs) {

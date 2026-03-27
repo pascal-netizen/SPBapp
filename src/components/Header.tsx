@@ -81,7 +81,7 @@ export function Header({ historyCount = 0, onOpenHistory }: HeaderProps) {
             <button
               key={lang}
               onClick={() => i18n.changeLanguage(lang)}
-              className={`px-3 py-1.5 text-xs font-medium cursor-pointer transition-colors ${
+              className={`px-3 py-2 text-xs font-medium cursor-pointer transition-colors ${
                 i18n.language === lang
                   ? 'bg-primary-600 text-white'
                   : 'bg-white dark:bg-surface-800 text-surface-600 dark:text-surface-400 hover:bg-surface-50 dark:hover:bg-surface-700'

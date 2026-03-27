@@ -81,8 +81,8 @@ export function MaterialSelect({ selectedId, onSelect, tab, currentVc }: Materia
 
   return (
     <div>
-      <div className="flex items-center gap-3">
-        <label className="w-48 shrink-0 text-sm text-surface-600 dark:text-surface-400">{t('common.material')}</label>
+      <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
+        <label className="sm:w-48 sm:shrink-0 text-sm text-surface-600 dark:text-surface-400">{t('common.material')}</label>
         <div className="flex-1 flex items-center gap-2">
           <div ref={wrapRef} className="flex-1 min-w-0 relative">
             <input
@@ -104,7 +104,7 @@ export function MaterialSelect({ selectedId, onSelect, tab, currentVc }: Materia
                 className="absolute z-50 left-0 right-0 mt-1 max-h-60 overflow-auto rounded-lg border border-surface-200 dark:border-surface-700 bg-white dark:bg-surface-800 shadow-lg py-1"
               >
                 {filtered.length === 0 && (
-                  <li className="px-3 py-2 text-sm text-surface-400">Kein Treffer</li>
+                  <li className="px-3 py-2 text-sm text-surface-400">{t('common.noMatch')}</li>
                 )}
                 {filtered.map((m, i) => (
                   <li
@@ -132,7 +132,7 @@ export function MaterialSelect({ selectedId, onSelect, tab, currentVc }: Materia
         </div>
       </div>
       {mat && mat.id !== 'custom' && (
-        <div className="mt-1.5 ml-[calc(12rem+0.75rem)] flex items-center gap-3 text-[11px] text-surface-400 dark:text-surface-500">
+        <div className="mt-1.5 sm:ml-[calc(12rem+0.75rem)] flex items-center gap-3 text-[11px] text-surface-400 dark:text-surface-400">
           {mat.density && <span>{mat.density} kg/dm³</span>}
           {mat.hardness && <span>{mat.hardness}</span>}
           {vcRange && (

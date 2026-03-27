@@ -15,10 +15,27 @@ function formatDisplay(v: number): string {
   return v.toLocaleString('de-DE', { maximumFractionDigits: 10 })
 }
 
-function parseInput(s: string): number {
-  // Accept both comma and dot as decimal separator
-  const normalized = s.replace(/\./g, '').replace(',', '.')
-  return parseFloat(normalized) || 0
+function parseInput(s: string): number | null {
+  const trimmed = s.trim()
+  if (trimmed === '' || trimmed === '-') return null
+
+  let normalized: string
+  const hasComma = trimmed.includes(',')
+  const hasDot = trimmed.includes('.')
+
+  if (hasComma && hasDot) {
+    // German format with thousands separator: 1.234,56
+    normalized = trimmed.replace(/\./g, '').replace(',', '.')
+  } else if (hasComma) {
+    // Comma as decimal separator: 0,3
+    normalized = trimmed.replace(',', '.')
+  } else {
+    // English format or integer: 0.3 or 100
+    normalized = trimmed
+  }
+
+  const result = parseFloat(normalized)
+  return isFinite(result) ? result : null
 }
 
 export function InputField({ label, value, unit, onChange, step = 1, min, max, action }: InputFieldProps) {
@@ -37,10 +54,12 @@ export function InputField({ label, value, unit, onChange, step = 1, min, max, a
 
   const handleBlur = () => {
     setEditing(false)
-    let parsed = parseInput(text)
-    if (min !== undefined) parsed = Math.max(min, parsed)
-    if (max !== undefined) parsed = Math.min(max, parsed)
-    onChange(parsed)
+    const parsed = parseInput(text)
+    if (parsed === null) return // keep previous valid value
+    let clamped = parsed
+    if (min !== undefined) clamped = Math.max(min, clamped)
+    if (max !== undefined) clamped = Math.min(max, clamped)
+    onChange(clamped)
   }
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -50,7 +69,7 @@ export function InputField({ label, value, unit, onChange, step = 1, min, max, a
     }
     if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
       e.preventDefault()
-      const current = parseInput(text)
+      const current = parseInput(text) ?? value
       const delta = e.key === 'ArrowUp' ? step : -step
       let next = parseFloat((current + delta).toFixed(10))
       if (min !== undefined) next = Math.max(min, next)
@@ -61,8 +80,8 @@ export function InputField({ label, value, unit, onChange, step = 1, min, max, a
   }
 
   return (
-    <div className="flex items-center gap-3 group">
-      <label className="w-48 shrink-0 text-sm text-surface-600 dark:text-surface-400 group-focus-within:text-primary-600 dark:group-focus-within:text-primary-400 transition-colors">
+    <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 group">
+      <label className="sm:w-48 sm:shrink-0 text-sm text-surface-600 dark:text-surface-400 group-focus-within:text-primary-600 dark:group-focus-within:text-primary-400 transition-colors">
         {label}
       </label>
       <div className="flex-1 flex items-center gap-2">
@@ -80,7 +99,7 @@ export function InputField({ label, value, unit, onChange, step = 1, min, max, a
         {action ? (
           <span className="w-14 shrink-0 flex justify-center">{action}</span>
         ) : (
-          <span className="w-14 text-xs text-surface-400 dark:text-surface-500 font-mono shrink-0">{unit}</span>
+          <span className="w-14 text-xs text-surface-400 dark:text-surface-400 font-mono shrink-0">{unit}</span>
         )}
       </div>
     </div>
