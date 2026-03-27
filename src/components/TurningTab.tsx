@@ -88,7 +88,7 @@ export function TurningTab({ history, loadedEntry }: TurningTabProps) {
         { labelKey: 'turning.M', value: results.M, unit: t('units.Nm'), decimals: 1 },
         { labelKey: 'turning.Q', value: results.Q, unit: t('units.cm3min') },
         { labelKey: 'common.utilization', value: results.utilization, unit: '%', decimals: 1 },
-        { labelKey: 'turning.th', value: results.th, unit: t('units.min'), hero: true },
+        { labelKey: 'turning.th', value: results.th, unit: t('units.min'), hero: true, timeFormat: true },
       ],
     },
   ]

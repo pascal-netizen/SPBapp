@@ -8,6 +8,14 @@ interface ResultCardProps {
   decimals?: number
   warning?: boolean
   hero?: boolean
+  timeFormat?: boolean
+}
+
+function fmtTime(minutes: number): string {
+  const totalSeconds = Math.round(minutes * 60)
+  const m = Math.floor(totalSeconds / 60)
+  const s = totalSeconds % 60
+  return s > 0 ? `${m} min ${s} s` : `${m} min`
 }
 
 function fmt(value: number, decimals: number): string {
@@ -38,10 +46,10 @@ async function copyToClipboard(text: string): Promise<boolean> {
   }
 }
 
-export function ResultCard({ label, value, unit, decimals = 2, warning = false, hero = false }: ResultCardProps) {
+export function ResultCard({ label, value, unit, decimals = 2, warning = false, hero = false, timeFormat = false }: ResultCardProps) {
   const { t } = useTranslation()
   const [copied, setCopied] = useState(false)
-  const display = fmt(value, decimals)
+  const display = timeFormat ? fmtTime(value) : fmt(value, decimals)
 
   const copy = async () => {
     const ok = await copyToClipboard(display)

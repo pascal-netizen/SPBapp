@@ -100,7 +100,7 @@ export function MillingTab({ history, loadedEntry }: MillingTabProps) {
         { labelKey: 'milling.P', value: results.P, unit: t('units.kW'), decimals: 1 },
         { labelKey: 'milling.Q', value: results.Q, unit: t('units.cm3min') },
         { labelKey: 'common.utilization', value: results.utilization, unit: '%', decimals: 1 },
-        { labelKey: 'milling.th', value: results.th, unit: t('units.min'), hero: true },
+        { labelKey: 'milling.th', value: results.th, unit: t('units.min'), hero: true, timeFormat: true },
       ],
     },
   ]

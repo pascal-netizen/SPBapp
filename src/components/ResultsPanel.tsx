@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { ResultCard } from './ResultCard'
 
-interface ResultItem { labelKey: string; value: number; unit: string; decimals?: number; hero?: boolean }
+interface ResultItem { labelKey: string; value: number; unit: string; decimals?: number; hero?: boolean; timeFormat?: boolean }
 interface ResultGroup { groupKey: string; items: ResultItem[] }
 interface ResultsPanelProps { groups: ResultGroup[]; utilization: number }
 
@@ -43,10 +43,11 @@ export function ResultsPanel({ groups, utilization }: ResultsPanelProps) {
                   key={r.labelKey}
                   label={t(r.labelKey)}
                   value={r.value}
-                  unit={r.unit}
+                  unit={r.timeFormat ? '' : r.unit}
                   decimals={r.decimals ?? 2}
                   warning={r.labelKey.includes('utilization') && utilization > 100}
                   hero={r.hero}
+                  timeFormat={r.timeFormat}
                 />
               ))}
             </div>
