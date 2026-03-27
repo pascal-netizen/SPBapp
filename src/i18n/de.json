@@ -11,5 +11,6 @@
   "inputGroups": { "material": "Werkstoff & Materialkennwerte", "toolGeometry": "Werkzeuggeometrie", "technology": "Technologieparameter", "machine": "Maschine", "path": "Bearbeitungsweg" },
   "actions": { "save": "Speichern", "saved": "Gespeichert!", "share": "Link teilen", "shared": "Kopiert!" },
   "history": { "title": "Verlauf", "empty": "Noch keine gespeicherten Berechnungen.", "clear": "Verlauf löschen" },
+  "comparison": { "title": "SOLL-IST Vergleich", "fromHistory": "Aus Verlauf", "manual": "Manuell eingeben", "selectEntry": "Verlaufseintrag wählen…", "parameter": "Parameter", "soll": "SOLL", "ist": "IST" },
   "theme": { "light": "Hell", "dark": "Dunkel", "system": "System" }
 }

@@ -4,6 +4,7 @@ import { InputField } from './InputField'
 import { MaterialSelect } from './MaterialSelect'
 import { ResultsPanel } from './ResultsPanel'
 import { CalculationSteps } from './CalculationSteps'
+import { ComparisonSection } from './ComparisonSection'
 import { ActionBar } from './ActionBar'
 import { InputGroupLabel } from './InputGroupLabel'
 import { calculateTurning } from '../calculations/turning'
@@ -178,6 +179,20 @@ export function TurningTab({ history, loadedEntry }: TurningTabProps) {
         <ResultsPanel groups={resultGroups} utilization={results.utilization} />
       </div>
       <CalculationSteps steps={steps} />
+      <ComparisonSection
+        tab="turning"
+        params={[
+          { key: 'n', labelKey: 'turning.n', unit: t('units.rpm'), decimals: 0, sollValue: results.n },
+          { key: 'vf', labelKey: 'turning.vf', unit: t('units.mmmin'), decimals: 0, sollValue: results.vf },
+          { key: 'P', labelKey: 'turning.P', unit: t('units.kW'), decimals: 1, sollValue: results.P },
+          { key: 'th', labelKey: 'turning.th', unit: t('units.min'), decimals: 2, sollValue: results.th, timeFormat: true },
+        ]}
+        historyEntries={history.entries}
+        calculateFromInputs={(inputs) => {
+          const r = calculateTurning({ ...defaultInputs, ...inputs }).results
+          return { n: r.n, vf: r.vf, P: r.P, th: r.th }
+        }}
+      />
     </div>
   )
 }

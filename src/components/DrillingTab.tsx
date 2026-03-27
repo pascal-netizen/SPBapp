@@ -4,6 +4,7 @@ import { InputField } from './InputField'
 import { MaterialSelect } from './MaterialSelect'
 import { ResultsPanel } from './ResultsPanel'
 import { CalculationSteps } from './CalculationSteps'
+import { ComparisonSection } from './ComparisonSection'
 import { ActionBar } from './ActionBar'
 import { InputGroupLabel } from './InputGroupLabel'
 import { calculateDrilling } from '../calculations/drilling'
@@ -177,6 +178,20 @@ export function DrillingTab({ history, loadedEntry }: DrillingTabProps) {
         <ResultsPanel groups={resultGroups} utilization={results.utilization} />
       </div>
       <CalculationSteps steps={steps} />
+      <ComparisonSection
+        tab="drilling"
+        params={[
+          { key: 'n', labelKey: 'drilling.n', unit: t('units.rpm'), decimals: 0, sollValue: results.n },
+          { key: 'vf', labelKey: 'drilling.vf', unit: t('units.mmmin'), decimals: 0, sollValue: results.vf },
+          { key: 'P', labelKey: 'drilling.P', unit: t('units.kW'), decimals: 1, sollValue: results.P },
+          { key: 'th', labelKey: 'drilling.th', unit: t('units.min'), decimals: 2, sollValue: results.th, timeFormat: true },
+        ]}
+        historyEntries={history.entries}
+        calculateFromInputs={(inputs) => {
+          const r = calculateDrilling({ ...defaultInputs, ...inputs }).results
+          return { n: r.n, vf: r.vf, P: r.P, th: r.th }
+        }}
+      />
     </div>
   )
 }
