@@ -68,7 +68,7 @@ export function MillingTab({ history, loadedEntry }: MillingTabProps) {
   const [savedIst, setSavedIst] = useState<Record<string, number> | null>(null)
   const [savedSoll, setSavedSoll] = useState<Record<string, number> | null>(null)
 
-  const comparisonValues = () => ({ n: results.n, vf: results.vf, th: results.th })
+  const comparisonValues = () => ({ n: results.n, vf: results.vf, Q: results.Q, th: results.th })
 
   const resultGroups = [
     {
@@ -205,6 +205,7 @@ export function MillingTab({ history, loadedEntry }: MillingTabProps) {
         params={[
           { key: 'n', labelKey: 'milling.n', unit: t('units.rpm'), decimals: 0, sollValue: results.n, neutralColor: true },
           { key: 'vf', labelKey: 'milling.vf', unit: t('units.mmmin'), decimals: 0, sollValue: results.vf },
+          { key: 'Q', labelKey: 'milling.Q', unit: t('units.cm3min'), decimals: 2, sollValue: results.Q },
           { key: 'th', labelKey: 'milling.th', unit: t('units.min'), decimals: 2, sollValue: results.th, timeFormat: true, invertColor: true },
         ]}
         savedIst={savedIst}
