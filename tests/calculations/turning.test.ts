@@ -71,6 +71,6 @@ describe('calculateTurning', () => {
   })
   it('returns 14 calculation steps', () => {
     const result = calculateTurning(defaultInputs)
-    expect(result.steps.length).toBe(14)
+    expect(result.steps.length).toBe(15)
   })
 })

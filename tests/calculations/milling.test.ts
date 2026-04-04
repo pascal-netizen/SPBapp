@@ -69,8 +69,8 @@ describe('calculateMilling', () => {
   })
   it('returns calculation steps', () => {
     const result = calculateMilling(defaultInputs)
-    expect(result.steps.length).toBe(16)
-    expect(result.steps[0].name).toContain('Eingriffswinkel')
+    expect(result.steps.length).toBe(18)
+    expect(result.steps[0].name).toContain('Fräserdurchmesser')
   })
   it('handles κ=45° correctly', () => {
     const input = { ...defaultInputs, kappa: 45 }
